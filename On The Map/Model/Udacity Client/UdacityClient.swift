@@ -51,13 +51,20 @@ class UdacityClient {
 
 		let requestBody = StudentLocationRequest(objectId: Auth.objectId, uniqueKey: Auth.uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaUrl: mediaUrl, latitude: latitude, longitude: longitude)
 
-		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, responseType: PostStudentLocationResponse.self) { (response, error) in
+		let headerFields: [String : String] = [
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		]
+
+		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, headerFields: headerFields, responseType: PostStudentLocationResponse.self) { (response, error) in
+
 			if let response = response {
 				print(response)
 				completion(true, nil)
 			} else {
 				completion(false, error)
 			}
+
 		}
 	}
 }
@@ -91,10 +98,16 @@ extension UdacityClient {
 		return task
 	}
 
-	class func taskForPostRequest<RequestType: Codable, ResponseType: Decodable>(url: URL, body: RequestType, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+	class func taskForPostRequest<RequestType: Codable, ResponseType: Decodable>(url: URL, body: RequestType, headerFields: [String: String], responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+
 		var request = URLRequest(url: url)
+
 		request.httpMethod = "POST"
-		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+		for (key, value) in headerFields {
+			request.addValue(value, forHTTPHeaderField: key)
+		}
+
 		request.httpBody = try! encoder.encode(body)
 
 		let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
