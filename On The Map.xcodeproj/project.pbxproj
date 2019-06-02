@@ -18,7 +18,7 @@
 /* Begin PBXFileReference section */
 		8405206622A456250008A55B /* On The Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On The Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8405206922A456250008A55B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8405206B22A456250008A55B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8405206B22A456250008A55B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
 		8405206E22A456250008A55B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8405207022A456250008A55B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8405207322A456250008A55B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -58,7 +58,6 @@
 			children = (
 				8405208122A456FF0008A55B /* Assets */,
 				8405207D22A456840008A55B /* Controller */,
-				8405206B22A456250008A55B /* ViewController.swift */,
 				8405207C22A4567E0008A55B /* View */,
 				8405207B22A456770008A55B /* Model */,
 				8405206922A456250008A55B /* AppDelegate.swift */,
@@ -86,6 +85,7 @@
 		8405207D22A456840008A55B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8405206B22A456250008A55B /* ViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -93,8 +93,8 @@
 		8405208122A456FF0008A55B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				8405207022A456250008A55B /* Assets.xcassets */,
 				8405207F22A456F40008A55B /* Colors.xcassets */,
+				8405207022A456250008A55B /* Assets.xcassets */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
