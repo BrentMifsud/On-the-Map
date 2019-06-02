@@ -14,6 +14,9 @@
 		8405208022A456F40008A55B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8405207F22A456F40008A55B /* Colors.xcassets */; };
 		8405208322A45AB50008A55B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208222A45AB50008A55B /* LoginViewController.swift */; };
 		8405208622A45C790008A55B /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208522A45C790008A55B /* UdacityClient.swift */; };
+		8405208822A45EE00008A55B /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208722A45EE00008A55B /* StudentLocation.swift */; };
+		8405208A22A460C00008A55B /* StudentLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208922A460C00008A55B /* StudentLocationResponse.swift */; };
+		8405208D22A462FC0008A55B /* PostStudentLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208C22A462FC0008A55B /* PostStudentLocationResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		8405207F22A456F40008A55B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		8405208222A45AB50008A55B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8405208522A45C790008A55B /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
+		8405208722A45EE00008A55B /* StudentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
+		8405208922A460C00008A55B /* StudentLocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocationResponse.swift; sourceTree = "<group>"; };
+		8405208C22A462FC0008A55B /* PostStudentLocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStudentLocationResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,8 +112,19 @@
 			isa = PBXGroup;
 			children = (
 				8405208522A45C790008A55B /* UdacityClient.swift */,
+				8405208722A45EE00008A55B /* StudentLocation.swift */,
+				8405208B22A462DD0008A55B /* UdacityResponses */,
 			);
 			path = "Udacity Client";
+			sourceTree = "<group>";
+		};
+		8405208B22A462DD0008A55B /* UdacityResponses */ = {
+			isa = PBXGroup;
+			children = (
+				8405208922A460C00008A55B /* StudentLocationResponse.swift */,
+				8405208C22A462FC0008A55B /* PostStudentLocationResponse.swift */,
+			);
+			path = UdacityResponses;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -182,8 +199,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8405208822A45EE00008A55B /* StudentLocation.swift in Sources */,
+				8405208D22A462FC0008A55B /* PostStudentLocationResponse.swift in Sources */,
 				8405208322A45AB50008A55B /* LoginViewController.swift in Sources */,
 				8405206A22A456250008A55B /* AppDelegate.swift in Sources */,
+				8405208A22A460C00008A55B /* StudentLocationResponse.swift in Sources */,
 				8405208622A45C790008A55B /* UdacityClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
