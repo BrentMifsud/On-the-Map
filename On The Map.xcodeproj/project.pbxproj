@@ -13,6 +13,7 @@
 		8405207422A456250008A55B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8405207222A456250008A55B /* LaunchScreen.storyboard */; };
 		8405208022A456F40008A55B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8405207F22A456F40008A55B /* Colors.xcassets */; };
 		8405208322A45AB50008A55B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208222A45AB50008A55B /* LoginViewController.swift */; };
+		8405208622A45C790008A55B /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208522A45C790008A55B /* UdacityClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		8405207522A456250008A55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8405207F22A456F40008A55B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		8405208222A45AB50008A55B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		8405208522A45C790008A55B /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 		8405207B22A456770008A55B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				8405208422A45C620008A55B /* Udacity Client */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -97,6 +100,14 @@
 				8405207022A456250008A55B /* Assets.xcassets */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		8405208422A45C620008A55B /* Udacity Client */ = {
+			isa = PBXGroup;
+			children = (
+				8405208522A45C790008A55B /* UdacityClient.swift */,
+			);
+			path = "Udacity Client";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,6 +184,7 @@
 			files = (
 				8405208322A45AB50008A55B /* LoginViewController.swift in Sources */,
 				8405206A22A456250008A55B /* AppDelegate.swift in Sources */,
+				8405208622A45C790008A55B /* UdacityClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
