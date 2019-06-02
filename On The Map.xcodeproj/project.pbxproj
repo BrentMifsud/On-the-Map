@@ -19,7 +19,8 @@
 		8405208D22A462FC0008A55B /* PostStudentLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208C22A462FC0008A55B /* PostStudentLocationResponse.swift */; };
 		8405209022A466130008A55B /* StudentLocationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405208F22A466130008A55B /* StudentLocationRequest.swift */; };
 		8405209222A468E40008A55B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405209122A468E40008A55B /* MapViewController.swift */; };
-		8405209422A468FD0008A55B /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405209322A468FD0008A55B /* ListViewController.swift */; };
+		8405209422A468FD0008A55B /* PinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405209322A468FD0008A55B /* PinListViewController.swift */; };
+		8405209622A478090008A55B /* AddPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405209522A478090008A55B /* AddPinViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +38,8 @@
 		8405208C22A462FC0008A55B /* PostStudentLocationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostStudentLocationResponse.swift; sourceTree = "<group>"; };
 		8405208F22A466130008A55B /* StudentLocationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocationRequest.swift; sourceTree = "<group>"; };
 		8405209122A468E40008A55B /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		8405209322A468FD0008A55B /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		8405209322A468FD0008A55B /* PinListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinListViewController.swift; sourceTree = "<group>"; };
+		8405209522A478090008A55B /* AddPinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPinViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +104,8 @@
 			children = (
 				8405208222A45AB50008A55B /* LoginViewController.swift */,
 				8405209122A468E40008A55B /* MapViewController.swift */,
-				8405209322A468FD0008A55B /* ListViewController.swift */,
+				8405209322A468FD0008A55B /* PinListViewController.swift */,
+				8405209522A478090008A55B /* AddPinViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -221,7 +224,8 @@
 				8405209022A466130008A55B /* StudentLocationRequest.swift in Sources */,
 				8405208322A45AB50008A55B /* LoginViewController.swift in Sources */,
 				8405206A22A456250008A55B /* AppDelegate.swift in Sources */,
-				8405209422A468FD0008A55B /* ListViewController.swift in Sources */,
+				8405209422A468FD0008A55B /* PinListViewController.swift in Sources */,
+				8405209622A478090008A55B /* AddPinViewController.swift in Sources */,
 				8405208A22A460C00008A55B /* StudentLocationResponse.swift in Sources */,
 				8405208622A45C790008A55B /* UdacityClient.swift in Sources */,
 				8405209222A468E40008A55B /* MapViewController.swift in Sources */,

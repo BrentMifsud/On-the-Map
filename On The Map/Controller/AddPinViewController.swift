@@ -1,5 +1,5 @@
 //
-//  ListViewController.swift
+//  AddPinViewController.swift
 //  On The Map
 //
 //  Created by Brent Mifsud on 2019-06-02.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListViewController: UIViewController {
+class AddPinViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
