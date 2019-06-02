@@ -49,7 +49,7 @@ class UdacityClient {
 
 	class func postStudentLocation(firstName: String, lastName: String, mapString: String, mediaUrl: String, latitude: Float, longitude: Float, createdAt: String, updatedAt: String, completion: @escaping (Bool, Error?) -> Void) {
 
-		let requestBody = StudentLocation(objectId: Auth.objectId, uniqueKey: Auth.uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaUrl: mediaUrl, latitude: latitude, longitude: longitude, createdAt: createdAt, updatedAt: updatedAt)
+		let requestBody = StudentLocationRequest(objectId: Auth.objectId, uniqueKey: Auth.uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaUrl: mediaUrl, latitude: latitude, longitude: longitude)
 
 		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, responseType: PostStudentLocationResponse.self) { (response, error) in
 			if let response = response {
