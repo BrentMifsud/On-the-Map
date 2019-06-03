@@ -18,9 +18,6 @@ extension UIViewController {
 		performSegue(withIdentifier: "addPin", sender: nil)
 	}
 
-	@IBAction func refreshButtonTapped(_ sender: Any) {
-	}
-
 	func isDownloading(_ downloading: Bool){
 		UIApplication.shared.isNetworkActivityIndicatorVisible = downloading
 	}

@@ -127,12 +127,32 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="pinCell" id="y7D-3w-hoj">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StudentPinCell" textLabel="NiP-hW-qdj" detailTextLabel="964-1I-8Tf" imageView="dfz-g5-7Mm" style="IBUITableViewCellStyleSubtitle" id="y7D-3w-hoj">
                                         <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="y7D-3w-hoj" id="qR6-ES-h3n">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NiP-hW-qdj">
+                                                    <rect key="frame" x="59" y="5" width="33.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="964-1I-8Tf">
+                                                    <rect key="frame" x="59" y="25.5" width="44" height="14.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="icon_pin" id="dfz-g5-7Mm">
+                                                    <rect key="frame" x="20" y="9" width="24" height="24"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </imageView>
+                                            </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
@@ -153,20 +173,14 @@
                                 <action selector="logoutButtonTapped:" destination="sEe-vq-10A" id="PWH-DT-UfI"/>
                             </connections>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="refresh" id="1gv-u6-hHC" userLabel="Refresh">
-                                <connections>
-                                    <action selector="refreshButtonTapped:" destination="sEe-vq-10A" id="64X-Ji-pY8"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Add Pin" image="icon_pin" id="9hF-fe-ov9">
-                                <connections>
-                                    <action selector="addPinButtonTapped:" destination="sEe-vq-10A" id="cGJ-nH-4HF"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" title="Add Pin" image="icon_pin" id="9hF-fe-ov9">
+                            <connections>
+                                <action selector="addPinButtonTapped:" destination="sEe-vq-10A" id="cGJ-nH-4HF"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="tableView" destination="5sR-J1-kut" id="sEU-iO-JTU"/>
                         <segue destination="Pgp-HZ-zvo" kind="show" identifier="addPin" id="QUe-Ni-qn9"/>
                     </connections>
                 </viewController>
@@ -312,6 +326,6 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rxN-Fn-qnp"/>
+        <segue reference="QUe-Ni-qn9"/>
     </inferredMetricsTieBreakers>
 </document>

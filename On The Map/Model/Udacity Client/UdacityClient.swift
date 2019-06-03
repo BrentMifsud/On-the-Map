@@ -58,19 +58,19 @@ class UdacityClient {
 
 	}
 
-	class func getStudentLocation(completion: @escaping ([StudentLocation]?, Error?) -> Void){
+	class func getStudentLocation(completion: @escaping ([StudentLocation], Error?) -> Void){
 		taskForGetRequest(url: Endpoints.getStudentLocation.url, responseType: StudentLocationResponse.self) { (response, error) in
 			if let response = response {
 				completion(response.results, nil)
 			} else {
-				completion(nil, error)
+				completion([], error)
 			}
 		}
 	}
 
 	class func postStudentLocation(firstName: String, lastName: String, mapString: String, mediaUrl: String, latitude: Float, longitude: Float, createdAt: String, updatedAt: String, completion: @escaping (Bool, Error?) -> Void) {
 
-		let requestBody = StudentLocationRequest(objectId: getSessionId(), uniqueKey: getAccountId(), firstName: firstName, lastName: lastName, mapString: mapString, mediaUrl: mediaUrl, latitude: latitude, longitude: longitude)
+		let requestBody = StudentLocationRequest(objectId: getSessionId(), uniqueKey: getAccountId(), firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaUrl, latitude: latitude, longitude: longitude)
 
 		let headerFields: [String : String] = [
 			"Content-Type" : "application/json"
@@ -103,12 +103,9 @@ extension UdacityClient {
 			do {
 				let responseObject = try decoder.decode(ResponseType.self, from: data)
 
-				print(String(data: data, encoding: .utf8)!)
-				print(responseObject)
-
-//				DispatchQueue.main.async {
-//					completion(responseObject, nil)
-//				}
+				DispatchQueue.main.async {
+					completion(responseObject, nil)
+				}
 			} catch {
 				DispatchQueue.main.async {
 					completion(nil, error)

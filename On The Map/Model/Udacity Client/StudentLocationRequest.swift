@@ -1,5 +1,5 @@
 //
-//  StudentLocation.swift
+//  StudentLocationRequest.swift
 //  On The Map
 //
 //  Created by Brent Mifsud on 2019-06-02.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StudentLocation: Codable {
+struct StudentLocationPost: Codable {
 	let objectId: String
 	let uniqueKey: String
 	let firstName: String
@@ -17,6 +17,4 @@ struct StudentLocation: Codable {
 	let mediaURL: String
 	let latitude: Float
 	let longitude: Float
-	let createdAt: String
-	let updatedAt: String
 }

@@ -10,9 +10,75 @@ import UIKit
 
 class PinListViewController: UIViewController {
 
+	@IBOutlet weak var tableView: UITableView!
+
+	lazy var refreshControl: UIRefreshControl = {
+		let refreshControl = UIRefreshControl()
+		refreshControl.tintColor = .black
+		refreshControl.addTarget(self, action: #selector(refreshStudentPinList), for: .valueChanged)
+
+		return refreshControl
+	}()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+		tableView.refreshControl = refreshControl
+
+		refreshStudentPinList()
     }
+
+	override func viewWillAppear(_ animated: Bool) {
+		super .viewWillAppear(animated)
+
+		self.tableView.dataSource = self
+		self.tableView.delegate = self
+
+		tableView.reloadData()
+	}
+
+	@objc func refreshStudentPinList() {
+		isDownloading(true)
+
+		UdacityClient.getStudentLocation { (studentLocations, error) in
+			StudentLocations.locations = studentLocations
+
+			unowned let pinListVC = self
+
+			DispatchQueue.main.async {
+				pinListVC.tableView.reloadData()
+				pinListVC.isDownloading(false)
+			}
+
+			let deadline = DispatchTime.now() + .milliseconds(500)
+			DispatchQueue.main.asyncAfter(deadline: deadline, execute: {
+				pinListVC.refreshControl.endRefreshing()
+			})
+		}
+	}
 }
+
+//MARK:- UITableView Methods
+extension PinListViewController: UITableViewDelegate, UITableViewDataSource {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return StudentLocations.locations.count
+	}
+
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "StudentPinCell")!
+
+		let studentPin = StudentLocations.locations[indexPath.row]
+
+		cell.textLabel?.text = studentPin.firstName + " " + studentPin.lastName
+		cell.detailTextLabel?.text = studentPin.mediaURL
+		cell.imageView?.image = UIImage(named: "icon_pin")
+
+		return cell
+	}
+
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		//TODO: Open mediaURL in cell
+	}
+}
+
+
