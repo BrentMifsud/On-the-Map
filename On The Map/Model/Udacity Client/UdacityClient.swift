@@ -13,26 +13,47 @@ class UdacityClient {
 	static let encoder = JSONEncoder()
 	static let decoder = JSONDecoder()
 
-	private struct Auth {
-		static var objectId = ""
-		static var uniqueKey = ""
-	}
-
+	//MARK:- Endpoints
 	enum Endpoints {
 		static let base = "https://onthemap-api.udacity.com/v1"
 
+		case getLoginSession
+		case deleteLoginSession
 		case getStudentLocation
 		case postStudentLocation
+		case putStudentLocation
 
 		var stringValue: String {
 			switch self {
-				case .getStudentLocation: return Endpoints.base + "/StudentLocation"
-			case .postStudentLocation: return Endpoints.base + "StudentLocation"
+			case .getLoginSession, .deleteLoginSession: return Endpoints.base + "/session"
+			case .getStudentLocation, .postStudentLocation: return Endpoints.base + "/StudentLocation"
+			case .putStudentLocation: return Endpoints.base + "/StudentLocation/\(getSessionId())"
 			}
 		}
 
 		var url: URL {
 			return URL(string: stringValue)!
+		}
+
+	}
+
+	//MARK:- Udacity Client Functions
+
+	class func getLoginSession(username: String, password: String, completion: @escaping (Bool, Error?) -> Void){
+		let login = LoginCredentials(username: username, password: password)
+		let headerFields: [String : String] = [
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		]
+		let body = SessionRequest(loginDetails: login)
+
+		taskForPostRequest(url: Endpoints.getLoginSession.url, body: body, headerFields: headerFields, responseType: LoginSessionResponse.self) { (response, error) in
+			if let response = response {
+				setUserdefaults(sessionId: response.session.id, sessionExpiry: response.session.expiration, accountKey: response.account.key)
+				completion(true, nil)
+			} else {
+				completion(false, error)
+			}
 		}
 
 	}
@@ -49,10 +70,9 @@ class UdacityClient {
 
 	class func postStudentLocation(firstName: String, lastName: String, mapString: String, mediaUrl: String, latitude: Float, longitude: Float, createdAt: String, updatedAt: String, completion: @escaping (Bool, Error?) -> Void) {
 
-		let requestBody = StudentLocationRequest(objectId: Auth.objectId, uniqueKey: Auth.uniqueKey, firstName: firstName, lastName: lastName, mapString: mapString, mediaUrl: mediaUrl, latitude: latitude, longitude: longitude)
+		let requestBody = StudentLocationRequest(objectId: getSessionId(), uniqueKey: getAccountId(), firstName: firstName, lastName: lastName, mapString: mapString, mediaUrl: mediaUrl, latitude: latitude, longitude: longitude)
 
 		let headerFields: [String : String] = [
-			"Accept" : "application/json",
 			"Content-Type" : "application/json"
 		]
 
@@ -69,6 +89,7 @@ class UdacityClient {
 	}
 }
 
+//MARK:- HTTP request methods
 extension UdacityClient {
 	@discardableResult class func taskForGetRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionTask {
 		let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -82,7 +103,7 @@ extension UdacityClient {
 			do {
 				let responseObject = try decoder.decode(ResponseType.self, from: data)
 
-				print(String(data: data, encoding: .utf8))
+				print(String(data: data, encoding: .utf8)!)
 				print(responseObject)
 
 //				DispatchQueue.main.async {
@@ -117,16 +138,54 @@ extension UdacityClient {
 				}
 				return
 			}
+			let newData = cleanResposneData(data: data)
+
+			do {
+				let responseObject = try decoder.decode(ResponseType.self, from: newData)
+				DispatchQueue.main.async {
+					completion(responseObject, nil)
+				}
+			} catch {
+				do {
+					let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: newData)
+					DispatchQueue.main.async {
+						completion(nil, errorResponse)
+					}
+				} catch {
+					DispatchQueue.main.async {
+						completion(nil, error)
+					}
+				}
+			}
+		}
+		task.resume()
+	}
+
+	class func taskForPutRequest<RequestType: Codable, ResponseType: Decodable>(url: URL, body: RequestType, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+
+		var request = URLRequest(url: url)
+		request.httpMethod = "PUT"
+		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.httpBody = try! encoder.encode(body)
+
+		let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+			guard let data = data else {
+				DispatchQueue.main.async {
+					completion(nil, error)
+				}
+				return
+			}
 
 			do {
 				let responseObject = try decoder.decode(ResponseType.self, from: data)
 
-				print(String(data: data, encoding: .utf8))
+				print(String(data: data, encoding: .utf8)!)
 				print(responseObject)
 
 //				DispatchQueue.main.async {
 //					completion(responseObject, nil)
 //				}
+
 			} catch {
 				DispatchQueue.main.async {
 					completion(nil, error)
@@ -134,5 +193,9 @@ extension UdacityClient {
 			}
 		}
 		task.resume()
+	}
+
+	fileprivate class func cleanResposneData(data: Data) -> Data{
+		return data.subdata(in: 5..<data.count)
 	}
 }

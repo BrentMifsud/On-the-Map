@@ -10,9 +10,14 @@ import UIKit
 
 class AddPinViewController: UIViewController {
 
-    override func viewDidLoad() {
+
+	@IBOutlet weak var locationTextField: UITextField!
+
+	override func viewDidLoad() {
         super.viewDidLoad()
 
+		locationTextField.attributedPlaceholder = NSAttributedString(string: "Enter your location here",
+															   attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         // Do any additional setup after loading the view.
     }
     

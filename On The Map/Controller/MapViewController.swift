@@ -16,14 +16,6 @@ class MapViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
-    
-
-	@IBAction func addPinButtonTapped(_ sender: Any) {
-		performSegue(withIdentifier: "addPin", sender: nil)
-	}
-
-	@IBAction func refreshButtonTapped(_ sender: Any) {
-	}
 }
 
 extension MapViewController: MKMapViewDelegate {
