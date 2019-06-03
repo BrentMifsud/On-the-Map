@@ -20,6 +20,8 @@ class PinListViewController: UIViewController {
 		return refreshControl
 	}()
 
+	var currentRecordNumber: Int = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,10 +42,12 @@ class PinListViewController: UIViewController {
 	@objc func refreshStudentPinList() {
 		isDownloading(true)
 
-		UdacityClient.getStudentLocation { (studentLocations, error) in
+		UdacityClient.getStudentLocation(startingRecord: 0) { (studentLocations, error) in
 			StudentLocations.locations = studentLocations
 
 			unowned let pinListVC = self
+
+			pinListVC.currentRecordNumber = StudentLocations.locations.count
 
 			DispatchQueue.main.async {
 				pinListVC.tableView.reloadData()
@@ -78,6 +82,24 @@ extension PinListViewController: UITableViewDelegate, UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		//TODO: Open mediaURL in cell
+	}
+
+	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+		guard currentRecordNumber > 0 else { return }
+		guard indexPath.row == StudentLocations.locations.count-1 else { return }
+		guard StudentLocations.locations.count % 100 == 0 else { return }
+
+		UdacityClient.getStudentLocation(startingRecord: indexPath.row) { (studentLocations, error) in
+
+			unowned let pinListVC = self
+
+			pinListVC.currentRecordNumber += studentLocations.count
+			StudentLocations.locations.append(contentsOf: studentLocations)
+
+			DispatchQueue.main.async {
+				pinListVC.tableView.reloadData()
+			}
+		}
 	}
 }
 

@@ -89,10 +89,10 @@
 				8405206922A456250008A55B /* AppDelegate.swift */,
 				8405207522A456250008A55B /* Info.plist */,
 				8451E6FB22A48D92004B071E /* Data */,
-				8405208122A456FF0008A55B /* Assets */,
-				8405207D22A456840008A55B /* Controller */,
-				8405207C22A4567E0008A55B /* View */,
 				8405207B22A456770008A55B /* Model */,
+				8405207C22A4567E0008A55B /* View */,
+				8405207D22A456840008A55B /* Controller */,
+				8405208122A456FF0008A55B /* Assets */,
 			);
 			path = "On The Map";
 			sourceTree = "<group>";

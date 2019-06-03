@@ -19,14 +19,15 @@ class UdacityClient {
 
 		case getLoginSession
 		case deleteLoginSession
-		case getStudentLocation
+		case getStudentLocation(startFromRecord: String)
 		case postStudentLocation
 		case putStudentLocation
 
 		var stringValue: String {
 			switch self {
 			case .getLoginSession, .deleteLoginSession: return Endpoints.base + "/session"
-			case .getStudentLocation, .postStudentLocation: return Endpoints.base + "/StudentLocation"
+			case .getStudentLocation(let startFrom): return Endpoints.base + "/StudentLocation" + "?limit=100&skip=\(startFrom)&order=-updatedAt"
+			case .postStudentLocation: return Endpoints.base + "/StudentLocation"
 			case .putStudentLocation: return Endpoints.base + "/StudentLocation/\(getSessionId())"
 			}
 		}
@@ -58,8 +59,10 @@ class UdacityClient {
 
 	}
 
-	class func getStudentLocation(completion: @escaping ([StudentLocation], Error?) -> Void){
-		taskForGetRequest(url: Endpoints.getStudentLocation.url, responseType: StudentLocationResponse.self) { (response, error) in
+	class func getStudentLocation(startingRecord: Int = 0, completion: @escaping ([StudentLocation], Error?) -> Void){
+		let url = Endpoints.getStudentLocation(startFromRecord: "\(startingRecord)").url
+
+		taskForGetRequest(url: url, responseType: StudentLocationResponse.self) { (response, error) in
 			if let response = response {
 				completion(response.results, nil)
 			} else {
