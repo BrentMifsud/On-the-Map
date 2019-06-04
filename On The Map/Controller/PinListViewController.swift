@@ -27,7 +27,11 @@ class PinListViewController: UIViewController {
 
 		tableView.refreshControl = refreshControl
 
-		refreshStudentPinList()
+		if StudentLocations.locations.count == 0 {
+			refreshStudentPinList()
+		}
+
+		currentRecordNumber = StudentLocations.locations.count
     }
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -42,9 +46,8 @@ class PinListViewController: UIViewController {
 	@objc func refreshStudentPinList() {
 		isDownloading(true)
 
-		UdacityClient.getStudentLocation(startingRecord: 0) { (studentLocations, error) in
-			StudentLocations.locations = studentLocations
-
+		StudentLocations.refreshStudentLocations { (error) in
+			guard error == nil else { return }
 			unowned let pinListVC = self
 
 			pinListVC.currentRecordNumber = StudentLocations.locations.count
@@ -89,12 +92,12 @@ extension PinListViewController: UITableViewDelegate, UITableViewDataSource {
 		guard indexPath.row == StudentLocations.locations.count-1 else { return }
 		guard StudentLocations.locations.count % 100 == 0 else { return }
 
-		UdacityClient.getStudentLocation(startingRecord: indexPath.row) { (studentLocations, error) in
+		StudentLocations.getMoreStudentLocations(startingRecord: indexPath.row) { (error) in
+			guard error == nil else { return }
 
 			unowned let pinListVC = self
 
-			pinListVC.currentRecordNumber += studentLocations.count
-			StudentLocations.locations.append(contentsOf: studentLocations)
+			pinListVC.currentRecordNumber += StudentLocations.locations.count
 
 			DispatchQueue.main.async {
 				pinListVC.tableView.reloadData()
