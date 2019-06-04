@@ -108,6 +108,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="mapView" destination="EbO-Yg-IZd" id="5O8-fi-4kj"/>
                         <segue destination="Pgp-HZ-zvo" kind="show" identifier="addPin" id="rxN-Fn-qnp"/>
                     </connections>
                 </viewController>
@@ -326,6 +327,6 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QUe-Ni-qn9"/>
+        <segue reference="rxN-Fn-qnp"/>
     </inferredMetricsTieBreakers>
 </document>

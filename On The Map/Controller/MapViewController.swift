@@ -11,13 +11,40 @@ import MapKit
 
 class MapViewController: UIViewController {
 
+	@IBOutlet weak var mapView: MKMapView!
+	
+	var annotations = [MKPointAnnotation]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+		if StudentLocations.locations.count == 0 {
+			refreshStudentLocations()
+		}
     }
 
 	@IBAction func refreshButtonTapped(_ sender: Any) {
+		refreshStudentLocations()
+	}
+
+	func refreshStudentLocations() {
+		isDownloading(true)
+
+		StudentLocations.refreshStudentLocations { (error) in
+			guard error == nil else { return }
+
+			unowned let mapVC = self
+
+			mapVC.mapView.removeAnnotations(mapVC.annotations)
+			mapVC.annotations = [MKPointAnnotation]()
+
+			for studentLocation in StudentLocations.locations {
+				mapVC.annotations.append(studentLocation.getMapAnnotation())
+			}
+
+			mapVC.mapView.addAnnotations(mapVC.annotations)
+			mapVC.isDownloading(false)
+		}
 	}
 }
 
@@ -30,9 +57,9 @@ extension MapViewController: MKMapViewDelegate {
 
 		if pinView == nil {
 			pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-			pinView?.canShowCallout = true
-			pinView?.pinTintColor = .red
-			pinView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+			pinView!.canShowCallout = true
+			pinView!.pinTintColor = .red
+			pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
 		} else {
 			pinView!.annotation = annotation
 		}
@@ -48,5 +75,4 @@ extension MapViewController: MKMapViewDelegate {
 			}
 		}
 	}
-
 }

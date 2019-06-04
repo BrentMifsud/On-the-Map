@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct StudentLocation: Codable {
 	let objectId: String
@@ -19,4 +20,13 @@ struct StudentLocation: Codable {
 	let longitude: Float
 	let createdAt: String
 	let updatedAt: String
+
+	func getMapAnnotation() -> MKPointAnnotation {
+		let mapAnnotation = MKPointAnnotation()
+		mapAnnotation.coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude), longitude: CLLocationDegrees(longitude))
+		mapAnnotation.title = "\(firstName) \(lastName)"
+		mapAnnotation.subtitle = "\(mediaURL)"
+
+		return mapAnnotation
+	}
 }
