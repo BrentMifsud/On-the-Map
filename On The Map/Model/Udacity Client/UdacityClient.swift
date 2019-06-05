@@ -20,6 +20,7 @@ class UdacityClient {
 		case getLoginSession
 		case deleteLoginSession
 		case getStudentLocation(startFromRecord: String)
+		case getSingleStudentLocation(studentKey: String)
 		case postStudentLocation
 		case putStudentLocation
 
@@ -27,6 +28,7 @@ class UdacityClient {
 			switch self {
 			case .getLoginSession, .deleteLoginSession: return Endpoints.base + "/session"
 			case .getStudentLocation(let startFrom): return Endpoints.base + "/StudentLocation" + "?limit=100&skip=\(startFrom)&order=-updatedAt"
+			case .getSingleStudentLocation(let uniqueKey): return Endpoints.base + "/StudentLocation?uniqueKey=\(uniqueKey)"
 			case .postStudentLocation: return Endpoints.base + "/StudentLocation"
 			case .putStudentLocation: return Endpoints.base + "/StudentLocation/\(getSessionId())"
 			}
@@ -59,8 +61,15 @@ class UdacityClient {
 
 	}
 
-	class func getStudentLocation(startingRecord: Int = 0, completion: @escaping ([StudentLocation], Error?) -> Void){
-		let url = Endpoints.getStudentLocation(startFromRecord: "\(startingRecord)").url
+	class func getStudentLocation(startingRecord: Int = 0, allStudents: Bool, completion: @escaping ([StudentLocation], Error?) -> Void){
+		let url: URL
+
+		if allStudents {
+			url = Endpoints.getStudentLocation(startFromRecord: "\(startingRecord)").url
+		} else {
+			guard getAccountId() != "" else {return}
+			url = Endpoints.getSingleStudentLocation(studentKey: getAccountId()).url
+		}
 
 		taskForGetRequest(url: url, responseType: StudentLocationResponse.self) { (response, error) in
 			if let response = response {

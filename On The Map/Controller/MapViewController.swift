@@ -29,23 +29,23 @@ class MapViewController: UIViewController {
 		refreshStudentLocations()
 	}
 
+
+
 	func refreshStudentLocations() {
 		isDownloading(true)
 
-		StudentLocations.refreshStudentLocations { (error) in
+		StudentLocations.refreshStudentLocations { [unowned self] (error) in
 			guard error == nil else { return }
 
-			unowned let mapVC = self
-
-			mapVC.mapView.removeAnnotations(mapVC.annotations)
-			mapVC.annotations = [MKPointAnnotation]()
+			self.mapView.removeAnnotations(self.annotations)
+			self.annotations = [MKPointAnnotation]()
 
 			for studentLocation in StudentLocations.locations {
-				mapVC.annotations.append(studentLocation.getMapAnnotation())
+				self.annotations.append(studentLocation.getMapAnnotation())
 			}
 
-			mapVC.mapView.addAnnotations(mapVC.annotations)
-			mapVC.isDownloading(false)
+			self.mapView.addAnnotations(self.annotations)
+			self.isDownloading(false)
 		}
 	}
 }

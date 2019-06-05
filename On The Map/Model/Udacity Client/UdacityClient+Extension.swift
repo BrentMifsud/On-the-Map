@@ -11,18 +11,18 @@ import Foundation
 extension UdacityClient {
 	static let sessionIdKey = "sessionId"
 	static let sessionExpiryKey = "sessionExpiry"
-	static let accountIdKey = "accountKey"
+	static let uniqueKey = "accountKey"
 
 	class func setUserdefaults(sessionId: String, sessionExpiry: String, accountKey: String) {
 		UserDefaults.standard.set(sessionId, forKey: sessionIdKey)
 		UserDefaults.standard.set(sessionExpiry, forKey: sessionExpiryKey)
-		UserDefaults.standard.set(accountKey, forKey: accountIdKey)
+		UserDefaults.standard.set(accountKey, forKey: uniqueKey)
 	}
 
 	class func clearUserdefaults(){
 		UserDefaults.standard.set("", forKey: sessionIdKey)
 		UserDefaults.standard.set("", forKey: sessionExpiryKey)
-		UserDefaults.standard.set("", forKey: accountIdKey)
+		UserDefaults.standard.set("", forKey: uniqueKey)
 	}
 
 	class func getSessionId() -> String {
@@ -34,7 +34,7 @@ extension UdacityClient {
 	}
 
 	class func getAccountId() -> String {
-		return UserDefaults.standard.string(forKey: accountIdKey) ?? ""
+		return UserDefaults.standard.string(forKey: uniqueKey) ?? ""
 	}
 
 }

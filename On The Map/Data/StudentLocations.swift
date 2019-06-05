@@ -12,7 +12,7 @@ class StudentLocations {
 	static var locations = [StudentLocation]()
 
 	class func refreshStudentLocations(completion: @escaping (Error?) -> Void) {
-		UdacityClient.getStudentLocation(startingRecord: 0) { (studentLocations, error) in
+		UdacityClient.getStudentLocation(startingRecord: 0, allStudents: true) { (studentLocations, error) in
 			guard error == nil else {
 				completion(error)
 				return
@@ -28,7 +28,7 @@ class StudentLocations {
 		guard StudentLocations.locations.count > 0 else { return }
 		guard StudentLocations.locations.count % 100 == 0 else { return }
 
-		UdacityClient.getStudentLocation(startingRecord: startingRecord) { (studentLocations, error) in
+		UdacityClient.getStudentLocation(startingRecord: startingRecord, allStudents: true) { (studentLocations, error) in
 			guard error == nil else {
 				completion(error)
 				return

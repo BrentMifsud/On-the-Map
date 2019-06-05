@@ -46,20 +46,19 @@ class PinListViewController: UIViewController {
 	@objc func refreshStudentPinList() {
 		isDownloading(true)
 
-		StudentLocations.refreshStudentLocations { (error) in
+		StudentLocations.refreshStudentLocations { [unowned self] (error) in
 			guard error == nil else { return }
-			unowned let pinListVC = self
 
-			pinListVC.currentRecordNumber = StudentLocations.locations.count
+			self.currentRecordNumber = StudentLocations.locations.count
 
 			DispatchQueue.main.async {
-				pinListVC.tableView.reloadData()
-				pinListVC.isDownloading(false)
+				self.tableView.reloadData()
+				self.isDownloading(false)
 			}
 
 			let deadline = DispatchTime.now() + .milliseconds(500)
 			DispatchQueue.main.asyncAfter(deadline: deadline, execute: {
-				pinListVC.refreshControl.endRefreshing()
+				self.refreshControl.endRefreshing()
 			})
 		}
 	}
@@ -92,15 +91,13 @@ extension PinListViewController: UITableViewDelegate, UITableViewDataSource {
 		guard indexPath.row == StudentLocations.locations.count-1 else { return }
 		guard StudentLocations.locations.count % 100 == 0 else { return }
 
-		StudentLocations.getMoreStudentLocations(startingRecord: indexPath.row) { (error) in
+		StudentLocations.getMoreStudentLocations(startingRecord: indexPath.row) { [unowned self] (error) in
 			guard error == nil else { return }
 
-			unowned let pinListVC = self
-
-			pinListVC.currentRecordNumber += StudentLocations.locations.count
+			self.currentRecordNumber += StudentLocations.locations.count
 
 			DispatchQueue.main.async {
-				pinListVC.tableView.reloadData()
+				self.tableView.reloadData()
 			}
 		}
 	}

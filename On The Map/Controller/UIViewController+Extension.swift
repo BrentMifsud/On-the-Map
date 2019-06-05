@@ -15,7 +15,25 @@ extension UIViewController {
 	}
 
 	@IBAction func addPinButtonTapped(_ sender: Any) {
-		performSegue(withIdentifier: "addPin", sender: nil)
+		UdacityClient.getStudentLocation(allStudents: false) { [unowned self] (response, error) in
+			if response.count > 0 {
+				self.presentOverwriteAlert()
+			} else {
+				self.performSegue(withIdentifier: "addPin", sender: nil)
+			}
+		}
+	}
+
+	func presentOverwriteAlert(){
+		let alertVC = UIAlertController(title: "Overwrite Pin?", message: "You already have a pin placed on the map./nWould you like to overwrite it with a new one?", preferredStyle: .alert)
+
+		alertVC.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [unowned self] (_) in
+			self.performSegue(withIdentifier: "addPin", sender: nil)
+		}))
+
+		alertVC.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
+
+		show(alertVC, sender: nil)
 	}
 
 	func isDownloading(_ downloading: Bool){
