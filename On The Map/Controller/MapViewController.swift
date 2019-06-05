@@ -18,6 +18,8 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+		mapView.delegate = self
+
 		if StudentLocations.locations.count == 0 {
 			refreshStudentLocations()
 		}
@@ -59,7 +61,7 @@ extension MapViewController: MKMapViewDelegate {
 			pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
 			pinView!.canShowCallout = true
 			pinView!.pinTintColor = .red
-			pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+			pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure) as UIButton
 		} else {
 			pinView!.annotation = annotation
 		}
