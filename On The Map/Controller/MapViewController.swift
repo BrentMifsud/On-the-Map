@@ -29,8 +29,6 @@ class MapViewController: UIViewController {
 		refreshStudentLocations()
 	}
 
-
-
 	func refreshStudentLocations() {
 		isDownloading(true)
 
@@ -46,6 +44,13 @@ class MapViewController: UIViewController {
 
 			self.mapView.addAnnotations(self.annotations)
 			self.isDownloading(false)
+		}
+	}
+
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "addPin" {
+			let destinationVC = segue.destination as? AddPinViewController
+			destinationVC?.updatePin = sender as? Bool
 		}
 	}
 }

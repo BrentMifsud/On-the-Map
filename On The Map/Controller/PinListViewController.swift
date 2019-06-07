@@ -62,6 +62,13 @@ class PinListViewController: UIViewController {
 			})
 		}
 	}
+
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "addPin" {
+			let destinationVC = segue.destination as? AddPinViewController
+			destinationVC?.updatePin = sender as? Bool
+		}
+	}
 }
 
 //MARK:- UITableView Methods

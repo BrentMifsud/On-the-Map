@@ -16,6 +16,7 @@ class ConfirmPinViewController: UIViewController {
 
 	var locationName: String!
 	var coordinate: CLLocationCoordinate2D!
+	var updatePin: Bool!
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +43,33 @@ class ConfirmPinViewController: UIViewController {
 	}
     
 	@IBAction func confirmPinButtonTapped(_ sender: Any) {
+		guard let mediaText = mediaTextField.text else {
+			presentErrorAlert(title: "Empty Media Field", message: "You must provide a url.")
+			return
+		}
+
+		//TODO: Get first and last name from get student id request
+		let studentLocation = StudentLocation(objectId: UdacityClient.getSessionId(), uniqueKey: UdacityClient.getAccountId(), firstName: "Bob", lastName: "MacBeth", mapString: locationName, mediaURL: mediaText, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude), createdAt: Date().description, updatedAt: Date().description)
+
+		if updatePin {
+			updateExistingPin(studentLocation: studentLocation)
+		} else {
+			postNewPin(studentLocation: studentLocation)
+		}
+	}
+
+	func postNewPin(studentLocation: StudentLocation){
+		UdacityClient.postStudentLocation(studentLocation: studentLocation) { [unowned self] (success, error) in
+			if success {
+				self.navigationController?.popToRootViewController(animated: true)
+			} else {
+				self.presentErrorAlert(title: "Unable to post new pin", message: "The following error occured:\n\(error!)\nPlease try again.")
+			}
+		}
+	}
+
+	func updateExistingPin(studentLocation: StudentLocation){
+
 	}
 }
 
@@ -50,9 +78,7 @@ extension ConfirmPinViewController: MKMapViewDelegate {
 	func searchForLocation(){
 		CLGeocoder().geocodeAddressString(locationName) { [unowned self] (placemark, error) in
 			guard error == nil else {
-				self.presentErrorAlert(title: "Search Failed", message: "Unable to find location: \(self.locationName!)" , completion: {
-					self.dismiss(animated: true, completion: nil)
-				})
+				self.presentErrorAlert(title: "Search Failed", message: "Unable to find location: \(self.locationName!)")
 				return
 			}
 

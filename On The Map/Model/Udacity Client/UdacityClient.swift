@@ -80,9 +80,9 @@ class UdacityClient {
 		}
 	}
 
-	class func postStudentLocation(firstName: String, lastName: String, mapString: String, mediaUrl: String, latitude: Float, longitude: Float, createdAt: String, updatedAt: String, completion: @escaping (Bool, Error?) -> Void) {
+	class func postStudentLocation(studentLocation: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
 
-		let requestBody = StudentLocationRequest(objectId: getSessionId(), uniqueKey: getAccountId(), firstName: firstName, lastName: lastName, mapString: mapString, mediaURL: mediaUrl, latitude: latitude, longitude: longitude)
+		let requestBody = StudentLocationRequest(objectId: getSessionId(), uniqueKey: getAccountId(), firstName: studentLocation.firstName, lastName: studentLocation.lastName, mapString: studentLocation.mapString, mediaURL: studentLocation.mediaURL, latitude: studentLocation.latitude, longitude: studentLocation.longitude)
 
 		let headerFields: [String : String] = [
 			"Content-Type" : "application/json"
@@ -147,16 +147,16 @@ extension UdacityClient {
 				}
 				return
 			}
-			let newData = cleanResposneData(data: data)
+			let cleanData = cleanResposneData(data: data)
 
 			do {
-				let responseObject = try decoder.decode(ResponseType.self, from: newData)
+				let responseObject = try decoder.decode(ResponseType.self, from: cleanData)
 				DispatchQueue.main.async {
 					completion(responseObject, nil)
 				}
 			} catch {
 				do {
-					let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: newData)
+					let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: cleanData)
 					DispatchQueue.main.async {
 						completion(nil, errorResponse)
 					}
@@ -185,19 +185,25 @@ extension UdacityClient {
 				return
 			}
 
+			let cleanData = cleanResposneData(data: data)
+
 			do {
-				let responseObject = try decoder.decode(ResponseType.self, from: data)
+				let responseObject = try decoder.decode(ResponseType.self, from: cleanData)
 
-				print(String(data: data, encoding: .utf8)!)
-				print(responseObject)
-
-//				DispatchQueue.main.async {
-//					completion(responseObject, nil)
-//				}
+				DispatchQueue.main.async {
+					completion(responseObject, nil)
+				}
 
 			} catch {
-				DispatchQueue.main.async {
-					completion(nil, error)
+				do {
+					let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: cleanData)
+					DispatchQueue.main.async {
+						completion(nil, errorResponse)
+					}
+				} catch {
+					DispatchQueue.main.async {
+						completion(nil, error)
+					}
 				}
 			}
 		}
