@@ -22,10 +22,20 @@ class AddPinViewController: UIViewController {
     }
 
 	@IBAction func findOnMapButtonTapped(_ sender: Any) {
-		guard let locationText = locationTextField.text else { return }
+		if let locationText = locationTextField.text {
+			if locationText == "" {
+				presentErrorAlert(title: "Invalid Location", message: "You must enter a location\nto place a map pin.") {}
+			} else {
+				performSegue(withIdentifier: "confirmPin", sender: locationTextField.text ?? "")
+			}
+		}
+	}
 
-		let storyboard = UIStoryboard(name: "Main", bundle: nil)
-		let confirmPinVC = storyboard.instantiateViewController(withIdentifier: "ConfirmPinViewController") as! ConfirmPinViewController
-		confirmPinVC.locationName = locationText
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "confirmPin" {
+			let destinationVC = segue.destination as! ConfirmPinViewController
+			let locationString = sender as! String
+			destinationVC.locationName = locationString
+		}
 	}
 }
