@@ -18,18 +18,18 @@ extension UIViewController {
 	@IBAction func addPinButtonTapped(_ sender: Any) {
 		UdacityClient.getStudentLocation(allStudents: false) { [unowned self] (response, error) in
 			if response.count > 0 {
-				self.presentOverwriteAlert()
+				self.presentOverwriteAlert(students: response)
 			} else {
 				self.performSegue(withIdentifier: "addPin", sender: self)
 			}
 		}
 	}
 
-	func presentOverwriteAlert(){
+	func presentOverwriteAlert(students: [StudentLocation]){
 		let alertVC = UIAlertController(title: "Overwrite Pin?", message: "You already have a pin placed on the map.\nWould you like to overwrite it with a new one?", preferredStyle: .alert)
 
 		alertVC.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [unowned self] (_) in
-			self.performSegue(withIdentifier: "addPin", sender: true)
+			self.performSegue(withIdentifier: "addPin", sender: (true, students))
 		}))
 
 		alertVC.addAction(UIAlertAction(title: "No", style: .default, handler: nil))

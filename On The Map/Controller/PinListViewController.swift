@@ -66,7 +66,9 @@ class PinListViewController: UIViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "addPin" {
 			let destinationVC = segue.destination as? AddPinViewController
-			destinationVC?.updatePin = sender as? Bool
+			let updateStudentInfo = sender as? (Bool, [StudentLocation])
+			destinationVC?.updatePin = updateStudentInfo?.0
+			destinationVC?.studentLocations = updateStudentInfo?.1
 		}
 	}
 }

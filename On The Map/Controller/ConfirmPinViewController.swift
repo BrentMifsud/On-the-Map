@@ -17,6 +17,7 @@ class ConfirmPinViewController: UIViewController {
 	var locationName: String!
 	var coordinate: CLLocationCoordinate2D!
 	var updatePin: Bool!
+	var studentLocations: [StudentLocation]!
 
 	override func viewDidLoad() {
         super.viewDidLoad()

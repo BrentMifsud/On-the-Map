@@ -13,6 +13,7 @@ class AddPinViewController: UIViewController {
 	@IBOutlet weak var locationTextField: UITextField!
 
 	var updatePin: Bool!
+	var studentLocations: [StudentLocation]!
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,7 @@ class AddPinViewController: UIViewController {
 			if locationText == "" {
 				presentErrorAlert(title: "Invalid Location", message: "You must enter a location\nto place a map pin.")
 			} else {
-				performSegue(withIdentifier: "confirmPin", sender: locationTextField.text ?? "")
+				performSegue(withIdentifier: "confirmPin", sender: (locationTextField.text ?? ""))
 			}
 		}
 	}
@@ -39,6 +40,7 @@ class AddPinViewController: UIViewController {
 			let locationString = sender as! String
 			destinationVC.locationName = locationString
 			destinationVC.updatePin = updatePin
+			destinationVC.studentLocations = studentLocations
 		}
 	}
 }
