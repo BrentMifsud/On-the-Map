@@ -10,26 +10,22 @@ import UIKit
 
 class AddPinViewController: UIViewController {
 
-
 	@IBOutlet weak var locationTextField: UITextField!
 
 	override func viewDidLoad() {
         super.viewDidLoad()
 
-		locationTextField.attributedPlaceholder = NSAttributedString(string: "Enter your location here",
-															   attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-        // Do any additional setup after loading the view.
+		locationTextField.attributedPlaceholder = NSAttributedString(
+			string: "Enter your location here",
+			attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
+		)
     }
-    
 
-    /*
-    // MARK: - Navigation
+	@IBAction func findOnMapButtonTapped(_ sender: Any) {
+		guard let locationText = locationTextField.text else { return }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let confirmPinVC = storyboard.instantiateViewController(withIdentifier: "ConfirmPinViewController") as! ConfirmPinViewController
+		confirmPinVC.locationName = locationText
+	}
 }

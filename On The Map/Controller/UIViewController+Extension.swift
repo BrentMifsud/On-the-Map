@@ -11,7 +11,8 @@ import UIKit
 extension UIViewController {
 
 	@IBAction func logoutButtonTapped(_ sender: UIBarButtonItem) {
-		self.dismiss(animated: true, completion: nil)
+		UdacityClient.clearUserdefaults()
+		presentingViewController?.dismiss(animated: true, completion: nil)
 	}
 
 	@IBAction func addPinButtonTapped(_ sender: Any) {
@@ -19,7 +20,7 @@ extension UIViewController {
 			if response.count > 0 {
 				self.presentOverwriteAlert()
 			} else {
-				self.performSegue(withIdentifier: "addPin", sender: nil)
+				self.performSegue(withIdentifier: "addPin", sender: self)
 			}
 		}
 	}
@@ -34,6 +35,13 @@ extension UIViewController {
 		alertVC.addAction(UIAlertAction(title: "No", style: .default, handler: nil))
 
 		show(alertVC, sender: nil)
+	}
+
+	func presentErrorAlert(title: String, message: String, completion: @escaping ()-> Void){
+		let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+		alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+			completion()
+		}))
 	}
 
 	func isDownloading(_ downloading: Bool){
