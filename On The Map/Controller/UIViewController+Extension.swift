@@ -22,7 +22,7 @@ extension UIViewController {
 			if response.count > 0 {
 				self.presentOverwriteAlert(students: response)
 			} else {
-				self.performSegue(withIdentifier: "addPin", sender: self)
+				self.performSegue(withIdentifier: "addPin", sender: (false, []))
 			}
 		}
 	}

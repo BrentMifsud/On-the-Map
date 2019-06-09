@@ -39,8 +39,8 @@ class AddPinViewController: UIViewController {
 			let destinationVC = segue.destination as! ConfirmPinViewController
 			let locationString = sender as! String
 			destinationVC.locationName = locationString
-			destinationVC.updatePin = updatePin
-			destinationVC.studentLocations = studentLocations
+			destinationVC.updateExistingPin = updatePin
+			destinationVC.existingStudentLocations = studentLocations
 		}
 	}
 }

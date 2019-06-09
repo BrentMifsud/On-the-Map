@@ -19,11 +19,12 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
 		mapView.delegate = self
-
-		if StudentLocations.locations.count == 0 {
-			refreshStudentLocations()
-		}
     }
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		refreshStudentLocations()
+	}
 
 	@IBAction func refreshButtonTapped(_ sender: Any) {
 		refreshStudentLocations()

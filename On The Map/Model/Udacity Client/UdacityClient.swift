@@ -22,7 +22,7 @@ class UdacityClient {
 		case getStudentLocation(startFromRecord: String)
 		case getSingleStudentLocation(studentKey: String)
 		case postStudentLocation
-		case putStudentLocation
+		case putStudentLocation(objectId: String)
 
 		var stringValue: String {
 			switch self {
@@ -30,7 +30,7 @@ class UdacityClient {
 			case .getStudentLocation(let startFrom): return Endpoints.base + "/StudentLocation" + "?limit=100&skip=\(startFrom)&order=-updatedAt"
 			case .getSingleStudentLocation(let uniqueKey): return Endpoints.base + "/StudentLocation?uniqueKey=\(uniqueKey)"
 			case .postStudentLocation: return Endpoints.base + "/StudentLocation"
-			case .putStudentLocation: return Endpoints.base + "/StudentLocation/\(getSessionId())"
+			case .putStudentLocation(let objectId): return Endpoints.base + "/StudentLocation/\(objectId)"
 			}
 		}
 
@@ -60,6 +60,48 @@ class UdacityClient {
 		}
 
 	}
+
+
+	class func getStudentLocation(startingRecord: Int = 0, allStudents: Bool, completion: @escaping ([StudentLocation], Error?) -> Void){
+		let url: URL
+
+		if allStudents {
+			url = Endpoints.getStudentLocation(startFromRecord: "\(startingRecord)").url
+		} else {
+			guard getAccountId() != "" else {return}
+			url = Endpoints.getSingleStudentLocation(studentKey: getAccountId()).url
+		}
+
+		taskForGetRequest(url: url, responseType: StudentLocationResponse.self) { (response, error) in
+			if let response = response {
+				completion(response.results, nil)
+			} else {
+				completion([], error)
+			}
+		}
+	}
+
+
+	class func postStudentLocation(studentLocationRequest: StudentLocationRequest, completion: @escaping (Bool, Error?) -> Void) {
+
+		let requestBody = studentLocationRequest
+
+		let headerFields: [String : String] = [
+			"Content-Type" : "application/json"
+		]
+
+		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, headerFields: headerFields, responseType: PostStudentLocationResponse.self) { (response, error) in
+
+			if let response = response {
+				print(response)
+				completion(true, nil)
+			} else {
+				completion(false, error)
+			}
+
+		}
+	}
+
 
 	class func deleteLoginSession(completion: @escaping (Bool, Error?) -> Void){
 		let url = Endpoints.deleteLoginSession.url
@@ -94,45 +136,48 @@ class UdacityClient {
 
 	}
 
-	class func getStudentLocation(startingRecord: Int = 0, allStudents: Bool, completion: @escaping ([StudentLocation], Error?) -> Void){
-		let url: URL
 
-		if allStudents {
-			url = Endpoints.getStudentLocation(startFromRecord: "\(startingRecord)").url
-		} else {
-			guard getAccountId() != "" else {return}
-			url = Endpoints.getSingleStudentLocation(studentKey: getAccountId()).url
-		}
+	class func putStudentLocation(studentLocationRequest: StudentLocationRequest, objectId: String, completion: @escaping (Bool, Error?) -> Void) {
+		var request = URLRequest(url: Endpoints.putStudentLocation(objectId: objectId).url)
+		let body = studentLocationRequest
 
-		taskForGetRequest(url: url, responseType: StudentLocationResponse.self) { (response, error) in
-			if let response = response {
-				completion(response.results, nil)
-			} else {
-				completion([], error)
-			}
-		}
-	}
+		request.httpMethod = "PUT"
+		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.httpBody = try! encoder.encode(body)
 
-	class func postStudentLocation(studentLocation: StudentLocation, completion: @escaping (Bool, Error?) -> Void) {
-
-		let requestBody = StudentLocationRequest(objectId: getSessionId(), uniqueKey: getAccountId(), firstName: studentLocation.firstName, lastName: studentLocation.lastName, mapString: studentLocation.mapString, mediaURL: studentLocation.mediaURL, latitude: studentLocation.latitude, longitude: studentLocation.longitude)
-
-		let headerFields: [String : String] = [
-			"Content-Type" : "application/json"
-		]
-
-		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, headerFields: headerFields, responseType: PostStudentLocationResponse.self) { (response, error) in
-
-			if let response = response {
-				print(response)
-				completion(true, nil)
-			} else {
-				completion(false, error)
+		let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+			guard let data = data else {
+				DispatchQueue.main.async {
+					completion(false, error)
+				}
+				return
 			}
 
+			do {
+				_ = try decoder.decode(PutStudentLocationResponse.self, from: data)
+
+				DispatchQueue.main.async {
+					completion(true, nil)
+				}
+			} catch {
+				do {
+					let errorResponse = try decoder.decode(UdacityPutErrorResponse.self, from: data)
+
+					DispatchQueue.main.async {
+						completion(false, errorResponse)
+					}
+				} catch {
+					DispatchQueue.main.async {
+						completion(false, error)
+					}
+				}
+			}
 		}
+		task.resume()
 	}
 }
+
+
 
 //MARK:- HTTP request methods
 extension UdacityClient {

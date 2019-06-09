@@ -23,3 +23,14 @@ extension UdacityErrorResponse: LocalizedError {
 		return self.errorMessage
 	}
 }
+
+struct UdacityPutErrorResponse: Codable {
+	let code: Int
+	let error: String
+}
+
+extension UdacityPutErrorResponse: LocalizedError {
+	var errorDescription: String? {
+		return self.error
+	}
+}

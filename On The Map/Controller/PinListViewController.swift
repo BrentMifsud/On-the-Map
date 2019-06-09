@@ -25,20 +25,18 @@ class PinListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+		self.tableView.dataSource = self
+		self.tableView.delegate = self
+
 		tableView.refreshControl = refreshControl
-
-		if StudentLocations.locations.count == 0 {
-			refreshStudentPinList()
-		}
-
-		currentRecordNumber = StudentLocations.locations.count
     }
 
 	override func viewWillAppear(_ animated: Bool) {
 		super .viewWillAppear(animated)
 
-		self.tableView.dataSource = self
-		self.tableView.delegate = self
+		refreshStudentPinList()
+
+		currentRecordNumber = StudentLocations.locations.count
 
 		tableView.reloadData()
 	}

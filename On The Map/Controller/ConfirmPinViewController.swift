@@ -16,8 +16,8 @@ class ConfirmPinViewController: UIViewController {
 
 	var locationName: String!
 	var coordinate: CLLocationCoordinate2D!
-	var updatePin: Bool!
-	var studentLocations: [StudentLocation]!
+	var updateExistingPin: Bool!
+	var existingStudentLocations: [StudentLocation]!
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,32 +44,43 @@ class ConfirmPinViewController: UIViewController {
     
 	@IBAction func confirmPinButtonTapped(_ sender: Any) {
 		guard let mediaText = mediaTextField.text else {
+			return
+		}
+
+		guard mediaText != "" else {
 			presentErrorAlert(title: "Empty Media Field", message: "You must provide a url.")
 			return
 		}
 
-		//TODO: Get first and last name from get student id request
-		let studentLocation = StudentLocation(objectId: UdacityClient.getSessionId(), uniqueKey: UdacityClient.getAccountId(), firstName: "Bob", lastName: "MacBeth", mapString: locationName, mediaURL: mediaText, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude), createdAt: Date().description, updatedAt: Date().description)
+		let studentLocationRequest = StudentLocationRequest(uniqueKey: UdacityClient.getAccountId(), firstName: "Bob", lastName: "MacBeth", mapString: locationName, mediaURL: mediaText, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude))
 
-		if updatePin {
-			updateExistingPin(studentLocation: studentLocation)
+		if updateExistingPin {
+			updateExistingPin(studentLocationRequest: studentLocationRequest)
 		} else {
-			postNewPin(studentLocation: studentLocation)
+			postNewPin(studentLocationRequest: studentLocationRequest)
 		}
 	}
 
-	func postNewPin(studentLocation: StudentLocation){
-		UdacityClient.postStudentLocation(studentLocation: studentLocation) { [unowned self] (success, error) in
+	func postNewPin(studentLocationRequest: StudentLocationRequest){
+		UdacityClient.postStudentLocation(studentLocationRequest: studentLocationRequest) { [unowned self] (success, error) in
 			if success {
 				self.navigationController?.popToRootViewController(animated: true)
 			} else {
-				self.presentErrorAlert(title: "Unable to post new pin", message: "The following error occured:\n\(error!)\nPlease try again.")
+				self.presentErrorAlert(title: "Unable to post new pin", message: "The following error occured:\n\(error?.localizedDescription ?? "Unable to post pin")")
 			}
 		}
 	}
 
-	func updateExistingPin(studentLocation: StudentLocation){
+	func updateExistingPin(studentLocationRequest: StudentLocationRequest){
+		guard !existingStudentLocations.isEmpty else {return}
 
+		UdacityClient.putStudentLocation(studentLocationRequest: studentLocationRequest, objectId: existingStudentLocations[0].objectId) { (success, error) in
+			if success {
+				self.navigationController?.popToRootViewController(animated: true)
+			} else {
+				self.presentErrorAlert(title: "Unable to post new pin", message: "The following error occured:\n\(error?.localizedDescription ?? "Unable to update pin"))")
+			}
+		}
 	}
 }
 
