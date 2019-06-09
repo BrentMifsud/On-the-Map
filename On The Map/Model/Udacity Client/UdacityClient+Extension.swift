@@ -9,32 +9,52 @@
 import Foundation
 
 extension UdacityClient {
-	static let sessionIdKey = "sessionId"
-	static let sessionExpiryKey = "sessionExpiry"
-	static let uniqueKey = "accountKey"
+	static let sessionKey = "sessionId"
+	static let expiryKey = "sessionExpiry"
+	static let uniqueIdKey = "accountKey"
+
+
+	static var sessionId: String = {
+		return UserDefaults.standard.string(forKey: sessionKey) ?? ""
+	}()
+	static var sessionExpiry: String = {
+		return UserDefaults.standard.string(forKey: expiryKey) ?? ""
+	}()
+	static var accountKey: String = {
+		return UserDefaults.standard.string(forKey: uniqueIdKey) ?? ""
+	}()
+
 
 	class func setUserdefaults(sessionId: String, sessionExpiry: String, accountKey: String) {
-		UserDefaults.standard.set(sessionId, forKey: sessionIdKey)
-		UserDefaults.standard.set(sessionExpiry, forKey: sessionExpiryKey)
-		UserDefaults.standard.set(accountKey, forKey: uniqueKey)
+		UserDefaults.standard.set(sessionId, forKey: sessionKey)
+		UserDefaults.standard.set(sessionExpiry, forKey: expiryKey)
+		UserDefaults.standard.set(accountKey, forKey: uniqueIdKey)
 	}
 
 	class func clearUserdefaults(){
-		UserDefaults.standard.set("", forKey: sessionIdKey)
-		UserDefaults.standard.set("", forKey: sessionExpiryKey)
-		UserDefaults.standard.set("", forKey: uniqueKey)
+		UserDefaults.standard.set(nil, forKey: sessionKey)
+		UserDefaults.standard.set(nil, forKey: expiryKey)
+		UserDefaults.standard.set(nil, forKey: uniqueIdKey)
 	}
 
 	class func getSessionId() -> String {
-		return UserDefaults.standard.string(forKey: sessionIdKey) ?? ""
+		return sessionId
 	}
 
 	class func getSessionExpiry() -> String {
-		return UserDefaults.standard.string(forKey: sessionExpiryKey) ?? ""
+		return sessionExpiry
 	}
 
 	class func getAccountId() -> String {
-		return UserDefaults.standard.string(forKey: uniqueKey) ?? ""
+		return uniqueIdKey
+	}
+
+	class func firstTimeLogin() -> Bool {
+		if sessionId.isEmpty && sessionExpiry.isEmpty && accountKey.isEmpty {
+			return true
+		} else {
+			return false
+		}
 	}
 
 }

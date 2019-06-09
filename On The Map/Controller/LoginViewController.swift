@@ -17,10 +17,10 @@ class LoginViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super .viewDidAppear(animated)
 
-		//Persistant Login. Udacity sessions have short expiry times.
-		guard !UdacityClient.getSessionId().isEmpty
-			&& !UdacityClient.getAccountId().isEmpty
-			&& !UdacityClient.getSessionExpiry().isEmpty else { return }
+		//MARK: Persistent Login feature
+		guard !UdacityClient.firstTimeLogin() else {
+			return
+		}
 
 		guard sessionIsValid(sessionExpiry: UdacityClient.getSessionExpiry()) else {
 			//TODO: Add username and password to keyvault so that new session can be retrieved without logging in again
@@ -29,6 +29,12 @@ class LoginViewController: UIViewController {
 		}
 
 		performSegue(withIdentifier: "completeLogin", sender: nil)
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		emailTextField.text = ""
+		passwordTextField.text = ""
 	}
 
 	@IBAction func loginButtonTapped(_ sender: Any) {
@@ -55,6 +61,10 @@ extension LoginViewController {
 	}
 
 	func sessionIsValid(sessionExpiry: String) -> Bool {
+		guard !sessionExpiry.isEmpty else {
+			return false
+		}
+
 		let dateFormatter = DateFormatter()
 
 		dateFormatter.locale = Locale(identifier: "en_US_POSIX")

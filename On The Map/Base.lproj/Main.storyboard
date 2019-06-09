@@ -91,7 +91,7 @@
                     <navigationItem key="navigationItem" id="3ZH-vh-OJS">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="dMs-v3-1Cl" userLabel="Logout">
                             <connections>
-                                <action selector="logoutButtonTapped:" destination="bDU-IH-iV0" id="WO9-eY-zVU"/>
+                                <action selector="logoutButtonTapped:" destination="bDU-IH-iV0" id="IpI-XU-OE5"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
@@ -171,7 +171,7 @@
                     <navigationItem key="navigationItem" id="V43-BQ-tRN">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="DMS-7X-WVt" userLabel="Logout">
                             <connections>
-                                <action selector="logoutButtonTapped:" destination="sEe-vq-10A" id="PWH-DT-UfI"/>
+                                <action selector="logoutButtonTapped:" destination="sEe-vq-10A" id="XMx-zZ-Xfh"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Add Pin" image="icon_pin" id="9hF-fe-ov9">
@@ -389,6 +389,6 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="U9w-Oh-al2"/>
+        <segue reference="Us9-vX-56M"/>
     </inferredMetricsTieBreakers>
 </document>

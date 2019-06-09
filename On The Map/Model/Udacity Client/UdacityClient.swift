@@ -62,7 +62,7 @@ class UdacityClient {
 	}
 
 	class func deleteLoginSession(completion: @escaping (Bool, Error?) -> Void){
-		var url = Endpoints.deleteLoginSession.url
+		let url = Endpoints.deleteLoginSession.url
 
 		var request = URLRequest(url: url)
 		request.httpMethod = "DELETE"
@@ -86,7 +86,6 @@ class UdacityClient {
 				return
 			}
 
-			let cleanData = cleanResposneData(data: data!)
 			DispatchQueue.main.async {
 				completion(true, nil)
 			}
