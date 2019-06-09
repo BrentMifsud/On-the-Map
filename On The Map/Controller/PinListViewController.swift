@@ -31,7 +31,7 @@ class PinListViewController: UIViewController {
 		tableView.refreshControl = refreshControl
     }
 
-	override func viewWillAppear(_ animated: Bool) {
+	override func viewDidAppear(_ animated: Bool) {
 		super .viewWillAppear(animated)
 
 		refreshStudentPinList()
@@ -90,7 +90,8 @@ extension PinListViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		//TODO: Open mediaURL in cell
+		let app = UIApplication.shared
+		app.open(URL(string: StudentLocations.locations[indexPath.row].mediaURL) ?? URL(string: "")!, options: [:], completionHandler: nil)
 	}
 
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

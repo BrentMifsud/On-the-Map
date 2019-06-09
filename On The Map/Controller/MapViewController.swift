@@ -21,7 +21,7 @@ class MapViewController: UIViewController {
 		mapView.delegate = self
     }
 
-	override func viewWillAppear(_ animated: Bool) {
+	override func viewDidAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		refreshStudentLocations()
 	}
@@ -81,7 +81,7 @@ extension MapViewController: MKMapViewDelegate {
 		if control == view.rightCalloutAccessoryView {
 			let app = UIApplication.shared
 			if let toOpen = view.annotation?.subtitle! {
-				app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+				app.open(URL(string: toOpen) ?? URL(string: "")!, options: [:], completionHandler: nil)
 			}
 		}
 	}
