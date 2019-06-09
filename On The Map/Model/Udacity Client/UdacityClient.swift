@@ -61,6 +61,40 @@ class UdacityClient {
 
 	}
 
+	class func deleteLoginSession(completion: @escaping (Bool, Error?) -> Void){
+		var url = Endpoints.deleteLoginSession.url
+
+		var request = URLRequest(url: url)
+		request.httpMethod = "DELETE"
+
+		var xsrfCookie: HTTPCookie? = nil
+		let sharedCookieStorage = HTTPCookieStorage.shared
+
+		for cookie in sharedCookieStorage.cookies! {
+			if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie}
+		}
+
+		if let xsrfCookie = xsrfCookie {
+			request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+		}
+
+		let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+			guard error == nil else {
+				DispatchQueue.main.async {
+					completion(false, error)
+				}
+				return
+			}
+
+			let cleanData = cleanResposneData(data: data!)
+			DispatchQueue.main.async {
+				completion(true, nil)
+			}
+		}
+		task.resume()
+
+	}
+
 	class func getStudentLocation(startingRecord: Int = 0, allStudents: Bool, completion: @escaping ([StudentLocation], Error?) -> Void){
 		let url: URL
 

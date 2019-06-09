@@ -11,8 +11,10 @@ import UIKit
 extension UIViewController {
 
 	@IBAction func logoutButtonTapped(_ sender: UIBarButtonItem) {
-		UdacityClient.clearUserdefaults()
-		presentingViewController?.dismiss(animated: true, completion: nil)
+		UdacityClient.deleteLoginSession { [unowned self] (success, error) in
+			UdacityClient.clearUserdefaults()
+			self.presentingViewController?.dismiss(animated: true, completion: nil)
+		}
 	}
 
 	@IBAction func addPinButtonTapped(_ sender: Any) {
