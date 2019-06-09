@@ -41,6 +41,12 @@ class LoginViewController: UIViewController {
 		UdacityClient.getLoginSession(username: emailTextField.text ?? "", password: passwordTextField.text ?? "", completion: handleLoginResponse(success:error:))
 	}
 
+	@IBAction func signUpButtonTapped(_ sender: Any) {
+		let app = UIApplication.shared
+		app.open(URL(string: "https://auth.udacity.com/sign-up")!, options: [:], completionHandler: nil)
+	}
+
+
 	func showLoginFailure(message: String) {
 		let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
 		alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

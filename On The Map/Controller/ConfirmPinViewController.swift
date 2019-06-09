@@ -52,7 +52,7 @@ class ConfirmPinViewController: UIViewController {
 			return
 		}
 
-		let studentLocationRequest = StudentLocationRequest(uniqueKey: UdacityClient.getAccountId(), firstName: "Bob", lastName: "MacBeth", mapString: locationName, mediaURL: mediaText, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude))
+		let studentLocationRequest = StudentLocationRequest(uniqueKey: UdacityClient.getAccountId(), firstName: "John", lastName: "Doe", mapString: locationName, mediaURL: mediaText, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude))
 
 		if updateExistingPin {
 			updateExistingPin(studentLocationRequest: studentLocationRequest)

@@ -11,8 +11,9 @@ import UIKit
 extension UIViewController {
 
 	@IBAction func logoutButtonTapped(_ sender: UIBarButtonItem) {
+		UdacityClient.clearUserdefaults()
+
 		UdacityClient.deleteLoginSession { [unowned self] (success, error) in
-			UdacityClient.clearUserdefaults()
 			self.presentingViewController?.dismiss(animated: true, completion: nil)
 		}
 	}
