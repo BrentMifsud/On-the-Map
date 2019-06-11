@@ -23,6 +23,7 @@ class UdacityClient {
 		case getSingleStudentLocation(uniqueKey: String)
 		case postStudentLocation
 		case putStudentLocation(objectId: String)
+		case getUserData(uniqueKey: String)
 
 		var stringValue: String {
 			switch self {
@@ -31,6 +32,7 @@ class UdacityClient {
 			case .getSingleStudentLocation(let uniqueKey): return Endpoints.base + "/StudentLocation?uniqueKey=\(uniqueKey)"
 			case .postStudentLocation: return Endpoints.base + "/StudentLocation"
 			case .putStudentLocation(let objectId): return Endpoints.base + "/StudentLocation/\(objectId)"
+			case .getUserData(let uniqueKey): return Endpoints.base + "/users/\(uniqueKey)"
 			}
 		}
 
@@ -61,6 +63,20 @@ class UdacityClient {
 
 	}
 
+	class func getUserData(completion: @escaping (UserDataResponse?, Error?) -> Void){
+		taskForGetRequest(url: Endpoints.getUserData(uniqueKey: uniqueKey).url, responseType: UserDataResponse.self, cleanData: true) { (userDataResponse, error) in
+			guard let userDataResponse = userDataResponse else {
+				completion(nil, error)
+				return
+			}
+
+			print("UserData First Name: \(userDataResponse.user.firstName)")
+			print("UserData Last Name: \(userDataResponse.user.lastName)")
+
+			completion(userDataResponse, nil)
+		}
+	}
+
 
 	class func getStudentLocation(startingRecord: Int = 0, allStudents: Bool, completion: @escaping ([StudentLocation], Error?) -> Void){
 		let url: URL
@@ -72,7 +88,7 @@ class UdacityClient {
 			url = Endpoints.getSingleStudentLocation(uniqueKey: uniqueKey).url
 		}
 
-		taskForGetRequest(url: url, responseType: StudentLocationResponse.self) { (response, error) in
+		taskForGetRequest(url: url, responseType: StudentLocationResponse.self, cleanData: false) { (response, error) in
 			if let response = response {
 				completion(response.results, nil)
 			} else {
@@ -91,13 +107,11 @@ class UdacityClient {
 		]
 
 		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, headerFields: headerFields, cleanData: false, responseType: PostStudentLocationResponse.self) { (response, error) in
-
-			if let response = response {
+			if response != nil {
 				completion(true, nil)
 			} else {
 				completion(false, error)
 			}
-
 		}
 	}
 
@@ -180,7 +194,7 @@ class UdacityClient {
 
 //MARK:- HTTP request methods
 extension UdacityClient {
-	@discardableResult class func taskForGetRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionTask {
+	@discardableResult class func taskForGetRequest<ResponseType: Decodable>(url: URL, responseType: ResponseType.Type, cleanData: Bool, completion: @escaping (ResponseType?, Error?) -> Void) -> URLSessionTask {
 		let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
 			guard let data = data else {
 				DispatchQueue.main.async {
@@ -190,7 +204,13 @@ extension UdacityClient {
 			}
 
 			do {
-				let responseObject = try decoder.decode(ResponseType.self, from: data)
+				let responseObject: ResponseType
+
+				if cleanData {
+					responseObject = try decoder.decode(ResponseType.self, from: cleanResposneData(data: data))
+				} else {
+					responseObject = try decoder.decode(ResponseType.self, from: data)
+				}
 
 				DispatchQueue.main.async {
 					completion(responseObject, nil)
