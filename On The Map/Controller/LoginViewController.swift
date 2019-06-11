@@ -22,7 +22,7 @@ class LoginViewController: UIViewController {
 			return
 		}
 
-		guard sessionIsValid(sessionExpiry: UdacityClient.getSessionExpiry()) else {
+		guard sessionIsValid(sessionExpiry: UdacityClient.sessionExpiry) else {
 			//TODO: Add username and password to keyvault so that new session can be retrieved without logging in again
 			showLoginFailure(message: "Session is expired. Please Login again.")
 			return

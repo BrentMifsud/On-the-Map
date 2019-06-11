@@ -20,7 +20,7 @@ class UdacityClient {
 		case getLoginSession
 		case deleteLoginSession
 		case getStudentLocation(startFromRecord: String)
-		case getSingleStudentLocation(studentKey: String)
+		case getSingleStudentLocation(uniqueKey: String)
 		case postStudentLocation
 		case putStudentLocation(objectId: String)
 
@@ -50,7 +50,7 @@ class UdacityClient {
 		]
 		let body = SessionRequest(loginDetails: login)
 
-		taskForPostRequest(url: Endpoints.getLoginSession.url, body: body, headerFields: headerFields, responseType: LoginSessionResponse.self) { (response, error) in
+		taskForPostRequest(url: Endpoints.getLoginSession.url, body: body, headerFields: headerFields, cleanData: true, responseType: LoginSessionResponse.self) { (response, error) in
 			if let response = response {
 				setUserdefaults(sessionId: response.session.id, sessionExpiry: response.session.expiration, accountKey: response.account.key)
 				completion(true, nil)
@@ -68,8 +68,8 @@ class UdacityClient {
 		if allStudents {
 			url = Endpoints.getStudentLocation(startFromRecord: "\(startingRecord)").url
 		} else {
-			guard getAccountId() != "" else {return}
-			url = Endpoints.getSingleStudentLocation(studentKey: getAccountId()).url
+			guard uniqueKey != "" else {return}
+			url = Endpoints.getSingleStudentLocation(uniqueKey: uniqueKey).url
 		}
 
 		taskForGetRequest(url: url, responseType: StudentLocationResponse.self) { (response, error) in
@@ -90,10 +90,9 @@ class UdacityClient {
 			"Content-Type" : "application/json"
 		]
 
-		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, headerFields: headerFields, responseType: PostStudentLocationResponse.self) { (response, error) in
+		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, headerFields: headerFields, cleanData: false, responseType: PostStudentLocationResponse.self) { (response, error) in
 
 			if let response = response {
-				print(response)
 				completion(true, nil)
 			} else {
 				completion(false, error)
@@ -206,7 +205,7 @@ extension UdacityClient {
 		return task
 	}
 
-	class func taskForPostRequest<RequestType: Codable, ResponseType: Decodable>(url: URL, body: RequestType, headerFields: [String: String], responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
+	class func taskForPostRequest<RequestType: Codable, ResponseType: Decodable>(url: URL, body: RequestType, headerFields: [String: String], cleanData: Bool, responseType: ResponseType.Type, completion: @escaping (ResponseType?, Error?) -> Void) {
 
 		var request = URLRequest(url: url)
 
@@ -225,16 +224,26 @@ extension UdacityClient {
 				}
 				return
 			}
-			let cleanData = cleanResposneData(data: data)
-
 			do {
-				let responseObject = try decoder.decode(ResponseType.self, from: cleanData)
+				let responseObject: ResponseType
+				if cleanData {
+					responseObject = try decoder.decode(ResponseType.self, from: cleanResposneData(data: data))
+				} else {
+					responseObject = try decoder.decode(ResponseType.self, from: data)
+				}
+
 				DispatchQueue.main.async {
 					completion(responseObject, nil)
 				}
 			} catch {
 				do {
-					let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: cleanData)
+					let errorResponse: UdacityErrorResponse
+					if cleanData {
+						errorResponse = try decoder.decode(UdacityErrorResponse.self, from: cleanResposneData(data: data))
+					} else  {
+						errorResponse = try decoder.decode(UdacityErrorResponse.self, from: data)
+					}
+
 					DispatchQueue.main.async {
 						completion(nil, errorResponse)
 					}
@@ -263,10 +272,8 @@ extension UdacityClient {
 				return
 			}
 
-			let cleanData = cleanResposneData(data: data)
-
 			do {
-				let responseObject = try decoder.decode(ResponseType.self, from: cleanData)
+				let responseObject = try decoder.decode(ResponseType.self, from: data)
 
 				DispatchQueue.main.async {
 					completion(responseObject, nil)
@@ -274,7 +281,7 @@ extension UdacityClient {
 
 			} catch {
 				do {
-					let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: cleanData)
+					let errorResponse = try decoder.decode(UdacityErrorResponse.self, from: data)
 					DispatchQueue.main.async {
 						completion(nil, errorResponse)
 					}

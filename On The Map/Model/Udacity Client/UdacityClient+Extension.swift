@@ -20,7 +20,7 @@ extension UdacityClient {
 	static var sessionExpiry: String = {
 		return UserDefaults.standard.string(forKey: expiryKey) ?? ""
 	}()
-	static var accountKey: String = {
+	static var uniqueKey: String = {
 		return UserDefaults.standard.string(forKey: uniqueIdKey) ?? ""
 	}()
 
@@ -37,20 +37,8 @@ extension UdacityClient {
 		UserDefaults.standard.set(nil, forKey: uniqueIdKey)
 	}
 
-	class func getSessionId() -> String {
-		return sessionId
-	}
-
-	class func getSessionExpiry() -> String {
-		return sessionExpiry
-	}
-
-	class func getAccountId() -> String {
-		return uniqueIdKey
-	}
-
 	class func firstTimeLogin() -> Bool {
-		if sessionId.isEmpty && sessionExpiry.isEmpty && accountKey.isEmpty {
+		if sessionId.isEmpty && sessionExpiry.isEmpty && uniqueKey.isEmpty {
 			return true
 		} else {
 			return false
