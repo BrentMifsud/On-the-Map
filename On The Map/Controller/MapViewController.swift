@@ -21,20 +21,26 @@ class MapViewController: UIViewController {
 		mapView.delegate = self
     }
 
+
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		refreshStudentLocations()
 	}
 
+
 	@IBAction func refreshButtonTapped(_ sender: Any) {
 		refreshStudentLocations()
 	}
+
 
 	func refreshStudentLocations() {
 		isDownloading(true)
 
 		StudentLocations.refreshStudentLocations { [unowned self] (error) in
-			guard error == nil else { return }
+			guard error == nil else {
+				self.presentErrorAlert(title: "Unable to Load Map Data", message: "We were unable to download map data.\nPlease check your internet connection.")
+				return
+			}
 
 			self.mapView.removeAnnotations(self.annotations)
 			self.annotations = [MKPointAnnotation]()
@@ -47,6 +53,7 @@ class MapViewController: UIViewController {
 			self.isDownloading(false)
 		}
 	}
+
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "addPin" {
@@ -77,6 +84,7 @@ extension MapViewController: MKMapViewDelegate {
 		return pinView
 	}
 
+
 	func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
 		if control == view.rightCalloutAccessoryView {
 			let app = UIApplication.shared
@@ -85,4 +93,5 @@ extension MapViewController: MKMapViewDelegate {
 			}
 		}
 	}
+	
 }

@@ -19,6 +19,7 @@ class ConfirmPinViewController: UIViewController {
 	var updateExistingPin: Bool!
 	var existingStudentLocations: [StudentLocation]!
 
+
 	override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,14 +32,18 @@ class ConfirmPinViewController: UIViewController {
 		)
     }
 
+
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		guard coordinate != nil else {
 			self.dismiss(animated: true, completion: nil)
 			return
 		}
+
+		addPin(coordinate: coordinate)
 	}
     
+
 	@IBAction func confirmPinButtonTapped(_ sender: Any) {
 		guard let mediaText = mediaTextField.text else {
 			return
@@ -47,6 +52,14 @@ class ConfirmPinViewController: UIViewController {
 		guard mediaText != "" else {
 			presentErrorAlert(title: "Empty Media Field", message: "You must provide a url.")
 			return
+		}
+
+		var mediaUrl: String
+
+		if mediaText.prefix(7).lowercased().contains("http://") || mediaText.prefix(8).lowercased().contains("https://") {
+			mediaUrl = mediaText
+		} else {
+			mediaUrl = "https://" + mediaText
 		}
 
 		//TODO: Remove hard coding once udacity issue is fixed
@@ -66,7 +79,7 @@ class ConfirmPinViewController: UIViewController {
 			//lastName = userDataResponse.user.lastName
 		}
 
-		let studentLocationRequest = StudentLocationRequest(uniqueKey: UdacityClient.uniqueKey, firstName: firstName, lastName: lastName, mapString: locationName, mediaURL: mediaText, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude))
+		let studentLocationRequest = StudentLocationRequest(uniqueKey: UdacityClient.uniqueKey, firstName: firstName, lastName: lastName, mapString: locationName, mediaURL: mediaUrl, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude))
 
 		if updateExistingPin {
 			updateExistingPin(studentLocationRequest: studentLocationRequest)
@@ -74,6 +87,7 @@ class ConfirmPinViewController: UIViewController {
 			postNewPin(studentLocationRequest: studentLocationRequest)
 		}
 	}
+
 
 	func postNewPin(studentLocationRequest: StudentLocationRequest){
 		UdacityClient.postStudentLocation(studentLocationRequest: studentLocationRequest) { [unowned self] (success, error) in
@@ -84,6 +98,7 @@ class ConfirmPinViewController: UIViewController {
 			}
 		}
 	}
+
 
 	func updateExistingPin(studentLocationRequest: StudentLocationRequest){
 		guard !existingStudentLocations.isEmpty else {return}
@@ -98,7 +113,9 @@ class ConfirmPinViewController: UIViewController {
 	}
 }
 
+
 extension ConfirmPinViewController: MKMapViewDelegate {
+
 	func addPin(coordinate: CLLocationCoordinate2D){
 		let annotation = MKPointAnnotation()
 		annotation.coordinate = coordinate
@@ -112,4 +129,5 @@ extension ConfirmPinViewController: MKMapViewDelegate {
 			self.mapView.regionThatFits(mapRegion)
 		}
 	}
+
 }
