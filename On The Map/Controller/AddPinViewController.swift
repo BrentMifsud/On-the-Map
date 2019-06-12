@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class AddPinViewController: UIViewController {
 
@@ -25,22 +26,36 @@ class AddPinViewController: UIViewController {
     }
 
 	@IBAction func findOnMapButtonTapped(_ sender: Any) {
-		if let locationText = locationTextField.text {
-			if locationText == "" {
-				presentErrorAlert(title: "Invalid Location", message: "You must enter a location\nto place a map pin.")
-			} else {
-				performSegue(withIdentifier: "confirmPin", sender: (locationTextField.text ?? ""))
-			}
+		guard let locationText = locationTextField.text else { return }
+
+		guard locationText != "" else {
+			presentErrorAlert(title: "Invalid Location", message: "You must enter a location\nto place a map pin.")
+			return
 		}
+		searchForLocation(locationText)
 	}
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "confirmPin" {
 			let destinationVC = segue.destination as! ConfirmPinViewController
-			let locationString = sender as! String
-			destinationVC.locationName = locationString
+			let locationDetails = sender as!  (String, CLLocationCoordinate2D)
+			destinationVC.locationName = locationDetails.0
+			destinationVC.coordinate = locationDetails.1
 			destinationVC.updateExistingPin = updatePin
 			destinationVC.existingStudentLocations = studentLocations
+		}
+	}
+
+	fileprivate func searchForLocation(_ locationText: String) {
+		CLGeocoder().geocodeAddressString(locationText) { [unowned self] (placemark, error) in
+			guard let placemark = placemark else {
+				self.presentErrorAlert(title: "Search Failed", message: "Unable to find location: \(locationText)")
+				return
+			}
+
+			let coordinate = placemark.first!.location!.coordinate
+			print(placemark)
+			self.performSegue(withIdentifier: "confirmPin", sender: (locationText, coordinate))
 		}
 	}
 }

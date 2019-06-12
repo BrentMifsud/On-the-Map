@@ -29,14 +29,11 @@ class ConfirmPinViewController: UIViewController {
 				string: "Enter a URL to share",
 				attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]
 		)
-
-		searchForLocation()
-
     }
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		guard locationName != nil else {
+		guard coordinate != nil else {
 			self.dismiss(animated: true, completion: nil)
 			return
 		}
@@ -52,8 +49,9 @@ class ConfirmPinViewController: UIViewController {
 			return
 		}
 
-		var firstName: String = ""
-		var lastName: String = ""
+		//TODO: Remove hard coding once udacity issue is fixed
+		var firstName: String = "John"
+		var lastName: String = "Doe"
 
 		/*
 		As per Francisco G on https://knowledge.udacity.com/questions/46606 the api to obtain user data is
@@ -61,8 +59,6 @@ class ConfirmPinViewController: UIViewController {
 		*/
 		UdacityClient.getUserData { (userDataResponse, error) in
 			guard let userDataResponse = userDataResponse else {
-				firstName = "John"
-				lastName = "Doe"
 				return
 			}
 
@@ -103,20 +99,6 @@ class ConfirmPinViewController: UIViewController {
 }
 
 extension ConfirmPinViewController: MKMapViewDelegate {
-
-	func searchForLocation(){
-		CLGeocoder().geocodeAddressString(locationName) { [unowned self] (placemark, error) in
-			guard error == nil else {
-				self.presentErrorAlert(title: "Search Failed", message: "Unable to find location: \(self.locationName!)")
-				return
-			}
-
-			self.coordinate = placemark!.first!.location!.coordinate
-			self.addPin(coordinate: self.coordinate)
-
-		}
-	}
-
 	func addPin(coordinate: CLLocationCoordinate2D){
 		let annotation = MKPointAnnotation()
 		annotation.coordinate = coordinate
