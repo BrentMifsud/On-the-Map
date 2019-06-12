@@ -55,13 +55,19 @@ class ConfirmPinViewController: UIViewController {
 		var firstName: String = ""
 		var lastName: String = ""
 
+		/*
+		As per Francisco G on https://knowledge.udacity.com/questions/46606 the api to obtain user data is
+		not working as of june 11th. As such first and last name are hardcoded for the time being.
+		*/
 		UdacityClient.getUserData { (userDataResponse, error) in
 			guard let userDataResponse = userDataResponse else {
+				firstName = "John"
+				lastName = "Doe"
 				return
 			}
 
-			firstName = userDataResponse.user.firstName
-			lastName = userDataResponse.user.lastName
+			//firstName = userDataResponse.user.firstName
+			//lastName = userDataResponse.user.lastName
 		}
 
 		let studentLocationRequest = StudentLocationRequest(uniqueKey: UdacityClient.uniqueKey, firstName: firstName, lastName: lastName, mapString: locationName, mediaURL: mediaText, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude))
