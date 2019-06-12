@@ -33,7 +33,7 @@ class PinListViewController: UIViewController {
     }
 
 	override func viewDidAppear(_ animated: Bool) {
-		super .viewWillAppear(animated)
+		super.viewDidAppear(animated)
 
 		refreshStudentPinList()
 
