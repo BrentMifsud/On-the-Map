@@ -11,6 +11,7 @@ import UIKit
 class PinListViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
 	lazy var refreshControl: UIRefreshControl = {
 		let refreshControl = UIRefreshControl()
@@ -58,6 +59,18 @@ class PinListViewController: UIViewController {
 			DispatchQueue.main.asyncAfter(deadline: deadline, execute: {
 				self.refreshControl.endRefreshing()
 			})
+		}
+	}
+
+	@IBAction func addPinButtonTapped(_ sender: Any) {
+		activityIndicator.startAnimating()
+		UdacityClient.getStudentLocation(allStudents: false) { [unowned self] (response, error) in
+			if response.count > 0 {
+				self.presentOverwriteAlert(students: response)
+			} else {
+				self.performSegue(withIdentifier: "addPin", sender: (false, []))
+			}
+			self.activityIndicator.stopAnimating()
 		}
 	}
 

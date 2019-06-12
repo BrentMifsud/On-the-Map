@@ -18,15 +18,6 @@ extension UIViewController {
 		}
 	}
 
-	@IBAction func addPinButtonTapped(_ sender: Any) {
-		UdacityClient.getStudentLocation(allStudents: false) { [unowned self] (response, error) in
-			if response.count > 0 {
-				self.presentOverwriteAlert(students: response)
-			} else {
-				self.performSegue(withIdentifier: "addPin", sender: (false, []))
-			}
-		}
-	}
 
 	func presentOverwriteAlert(students: [StudentLocation]){
 		let alertVC = UIAlertController(title: "Overwrite Pin?", message: "You already have a pin placed on the map.\nWould you like to overwrite it with a new one?", preferredStyle: .alert)
@@ -40,19 +31,23 @@ extension UIViewController {
 		present(alertVC, animated: true, completion: nil)
 	}
 
+
 	func presentErrorAlert(title: String, message: String){
 		let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
 		alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 		present(alertVC, animated: true, completion: nil)
 	}
 
+
 	func isDownloading(_ downloading: Bool){
 		UIApplication.shared.isNetworkActivityIndicatorVisible = downloading
 	}
 
+
 	func subscribeToKeyboardNotifications() {
 		self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardOnTap)))
 	}
+
 
 	func unsubscribeFromKeyboardNotifications() {
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -60,6 +55,7 @@ extension UIViewController {
 
 		self.view.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardOnTap)))
 	}
+	
 
 	@objc func dismissKeyboardOnTap(){
 		self.view.endEditing(true)

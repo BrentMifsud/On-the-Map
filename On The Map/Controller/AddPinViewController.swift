@@ -12,6 +12,7 @@ import MapKit
 class AddPinViewController: UIViewController {
 
 	@IBOutlet weak var locationTextField: UITextField!
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
 	var updatePin: Bool!
 	var studentLocations: [StudentLocation]!
@@ -46,7 +47,18 @@ class AddPinViewController: UIViewController {
 		}
 	}
 
+	fileprivate func isGeocoding(_ geocoding: Bool){
+		if geocoding{
+			activityIndicator.startAnimating()
+		} else {
+			activityIndicator.stopAnimating()
+		}
+
+		isDownloading(geocoding)
+	}
+
 	fileprivate func searchForLocation(_ locationText: String) {
+		isGeocoding(true)
 		CLGeocoder().geocodeAddressString(locationText) { [unowned self] (placemark, error) in
 			guard let placemark = placemark else {
 				self.presentErrorAlert(title: "Search Failed", message: "Unable to find location: \(locationText)")
@@ -54,7 +66,7 @@ class AddPinViewController: UIViewController {
 			}
 
 			let coordinate = placemark.first!.location!.coordinate
-			print(placemark)
+			self.isGeocoding(false)
 			self.performSegue(withIdentifier: "confirmPin", sender: (locationText, coordinate))
 		}
 	}

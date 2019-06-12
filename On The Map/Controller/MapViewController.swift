@@ -12,6 +12,7 @@ import MapKit
 class MapViewController: UIViewController {
 
 	@IBOutlet weak var mapView: MKMapView!
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 	
 	var annotations = [MKPointAnnotation]()
 
@@ -34,7 +35,7 @@ class MapViewController: UIViewController {
 
 
 	func refreshStudentLocations() {
-		isDownloading(true)
+		isGeocoding(true)
 
 		StudentLocations.refreshStudentLocations { [unowned self] (error) in
 			guard error == nil else {
@@ -50,7 +51,20 @@ class MapViewController: UIViewController {
 			}
 
 			self.mapView.addAnnotations(self.annotations)
-			self.isDownloading(false)
+			self.isGeocoding(false)
+		}
+	}
+
+	@IBAction func addPinButtonTapped(_ sender: Any) {
+		activityIndicator.startAnimating()
+
+		UdacityClient.getStudentLocation(allStudents: false) { [unowned self] (response, error) in
+			if response.count > 0 {
+				self.presentOverwriteAlert(students: response)
+			} else {
+				self.performSegue(withIdentifier: "addPin", sender: (false, []))
+			}
+			self.activityIndicator.stopAnimating()
 		}
 	}
 
@@ -62,6 +76,16 @@ class MapViewController: UIViewController {
 			destinationVC?.updatePin = updateStudentInfo?.0
 			destinationVC?.studentLocations = updateStudentInfo?.1
 		}
+	}
+
+	func isGeocoding(_ geocoding: Bool){
+		if geocoding{
+			activityIndicator.startAnimating()
+		} else {
+			activityIndicator.stopAnimating()
+		}
+
+		isDownloading(geocoding)
 	}
 }
 

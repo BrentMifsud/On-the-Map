@@ -131,12 +131,18 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="EbO-Yg-IZd">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                             </mapView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="495-ZO-NVf">
+                                <rect key="frame" x="188.66666666666666" y="429.66666666666669" width="37" height="37"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="495-ZO-NVf" firstAttribute="centerY" secondItem="kic-IL-xsg" secondAttribute="centerY" id="Ctb-VZ-fkA"/>
                             <constraint firstItem="EbO-Yg-IZd" firstAttribute="leading" secondItem="kic-IL-xsg" secondAttribute="leading" id="S9f-gJ-1qf"/>
                             <constraint firstItem="EbO-Yg-IZd" firstAttribute="top" secondItem="uIs-bb-zqn" secondAttribute="top" id="e1Q-5e-Y6G"/>
                             <constraint firstAttribute="trailing" secondItem="EbO-Yg-IZd" secondAttribute="trailing" id="eoU-uY-5Dz"/>
+                            <constraint firstItem="495-ZO-NVf" firstAttribute="centerX" secondItem="kic-IL-xsg" secondAttribute="centerX" id="hnQ-cB-GvO"/>
                             <constraint firstItem="uIs-bb-zqn" firstAttribute="bottom" secondItem="EbO-Yg-IZd" secondAttribute="bottom" id="huw-lM-pgS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uIs-bb-zqn"/>
@@ -161,6 +167,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="495-ZO-NVf" id="tr0-qh-8ZI"/>
                         <outlet property="mapView" destination="EbO-Yg-IZd" id="5O8-fi-4kj"/>
                         <segue destination="Pgp-HZ-zvo" kind="show" identifier="addPin" id="Us9-vX-56M"/>
                     </connections>
@@ -211,11 +218,17 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="2Hq-dh-YW1">
+                                <rect key="frame" x="188.66666666666666" y="429.66666666666669" width="37" height="37"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="2Hq-dh-YW1" firstAttribute="centerY" secondItem="4Zk-Qd-bJL" secondAttribute="centerY" id="A5d-Tv-CtS"/>
                             <constraint firstItem="5sR-J1-kut" firstAttribute="leading" secondItem="uNl-lP-52c" secondAttribute="leading" id="KsF-9F-ZpG"/>
                             <constraint firstItem="uNl-lP-52c" firstAttribute="bottom" secondItem="5sR-J1-kut" secondAttribute="bottom" id="Qxa-CK-gff"/>
+                            <constraint firstItem="2Hq-dh-YW1" firstAttribute="centerX" secondItem="4Zk-Qd-bJL" secondAttribute="centerX" id="Rb3-xw-x6H"/>
                             <constraint firstItem="5sR-J1-kut" firstAttribute="top" secondItem="uNl-lP-52c" secondAttribute="top" id="ldl-aF-SLX"/>
                             <constraint firstItem="5sR-J1-kut" firstAttribute="trailing" secondItem="uNl-lP-52c" secondAttribute="trailing" id="qSN-Bl-Goe"/>
                         </constraints>
@@ -234,6 +247,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="2Hq-dh-YW1" id="mAK-GF-Xhy"/>
                         <outlet property="tableView" destination="5sR-J1-kut" id="sEU-iO-JTU"/>
                         <segue destination="Pgp-HZ-zvo" kind="show" identifier="addPin" id="U9w-Oh-al2"/>
                     </connections>
@@ -294,6 +308,10 @@
                                     <action selector="findOnMapButtonTapped:" destination="Pgp-HZ-zvo" eventType="touchUpInside" id="2yn-44-XzW"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="kcC-TH-NrD">
+                                <rect key="frame" x="188.66666666666666" y="464" width="37" height="37"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -301,6 +319,8 @@
                             <constraint firstItem="neN-WH-rXH" firstAttribute="trailing" secondItem="xw6-8i-6Mm" secondAttribute="trailing" id="FZd-Ch-CCe"/>
                             <constraint firstItem="udb-jE-5be" firstAttribute="centerX" secondItem="wOE-Ef-Iwy" secondAttribute="centerX" id="UF7-md-Nda"/>
                             <constraint firstItem="udb-jE-5be" firstAttribute="top" secondItem="xw6-8i-6Mm" secondAttribute="bottom" constant="50" id="Wfm-fc-OX2"/>
+                            <constraint firstItem="kcC-TH-NrD" firstAttribute="top" secondItem="udb-jE-5be" secondAttribute="bottom" constant="8" id="bRt-6b-FGb"/>
+                            <constraint firstItem="kcC-TH-NrD" firstAttribute="centerX" secondItem="wOE-Ef-Iwy" secondAttribute="centerX" id="d4I-e9-pfT"/>
                             <constraint firstItem="xw6-8i-6Mm" firstAttribute="top" secondItem="KVR-tV-tFV" secondAttribute="bottom" constant="8" id="idd-RA-WNN"/>
                             <constraint firstItem="neN-WH-rXH" firstAttribute="trailing" secondItem="KVR-tV-tFV" secondAttribute="trailing" id="jYe-2v-8fl"/>
                             <constraint firstItem="KVR-tV-tFV" firstAttribute="leading" secondItem="neN-WH-rXH" secondAttribute="leading" id="nJy-5v-5ps"/>
@@ -310,6 +330,7 @@
                         <viewLayoutGuide key="safeArea" id="neN-WH-rXH"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="kcC-TH-NrD" id="PRn-1b-DqR"/>
                         <outlet property="locationTextField" destination="xw6-8i-6Mm" id="Cyt-VX-E00"/>
                         <segue destination="SSY-lG-LuS" kind="show" identifier="confirmPin" id="3lq-oY-Tkr"/>
                     </connections>
@@ -443,6 +464,6 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Us9-vX-56M"/>
+        <segue reference="U9w-Oh-al2"/>
     </inferredMetricsTieBreakers>
 </document>
