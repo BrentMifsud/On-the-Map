@@ -36,6 +36,11 @@ class LoginViewController: UIViewController {
 		super.viewWillAppear(animated)
 		emailTextField.text = ""
 		passwordTextField.text = ""
+		subscribeToKeyboardNotifications()
+	}
+
+	override func viewWillDisappear(_ animated: Bool) {
+		unsubscribeFromKeyboardNotifications()
 	}
 
 	@IBAction func loginButtonTapped(_ sender: Any) {

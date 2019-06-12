@@ -50,4 +50,19 @@ extension UIViewController {
 		UIApplication.shared.isNetworkActivityIndicatorVisible = downloading
 	}
 
+	func subscribeToKeyboardNotifications() {
+		self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardOnTap)))
+	}
+
+	func unsubscribeFromKeyboardNotifications() {
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+
+		self.view.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardOnTap)))
+	}
+
+	@objc func dismissKeyboardOnTap(){
+		self.view.endEditing(true)
+	}
+
 }
