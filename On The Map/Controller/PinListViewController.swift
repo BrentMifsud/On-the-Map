@@ -65,11 +65,9 @@ class PinListViewController: UIViewController {
 	@IBAction func addPinButtonTapped(_ sender: Any) {
 		activityIndicator.startAnimating()
 		UdacityClient.getStudentLocation(allStudents: false) { [unowned self] (response, error) in
-			if response.count > 0 {
-				self.presentOverwriteAlert(students: response)
-			} else {
-				self.performSegue(withIdentifier: "addPin", sender: (false, []))
-			}
+
+			response.count > 0 ? self.presentOverwriteAlert(students: response) : self.performSegue(withIdentifier: "addPin", sender: (false, []))
+
 			self.activityIndicator.stopAnimating()
 		}
 	}

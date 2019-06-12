@@ -48,12 +48,7 @@ class AddPinViewController: UIViewController {
 	}
 
 	fileprivate func isGeocoding(_ geocoding: Bool){
-		if geocoding{
-			activityIndicator.startAnimating()
-		} else {
-			activityIndicator.stopAnimating()
-		}
-
+		geocoding ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
 		isDownloading(geocoding)
 	}
 

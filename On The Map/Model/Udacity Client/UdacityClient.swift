@@ -107,11 +107,8 @@ class UdacityClient {
 		]
 
 		taskForPostRequest(url: Endpoints.postStudentLocation.url, body: requestBody, headerFields: headerFields, cleanData: false, responseType: PostStudentLocationResponse.self) { (response, error) in
-			if response != nil {
-				completion(true, nil)
-			} else {
-				completion(false, error)
-			}
+
+			response != nil ? completion(true, nil) : completion(false, error)
 		}
 	}
 
@@ -204,13 +201,7 @@ extension UdacityClient {
 			}
 
 			do {
-				let responseObject: ResponseType
-
-				if cleanData {
-					responseObject = try decoder.decode(ResponseType.self, from: cleanResposneData(data: data))
-				} else {
-					responseObject = try decoder.decode(ResponseType.self, from: data)
-				}
+				let responseObject = cleanData ? try decoder.decode(ResponseType.self, from: cleanResposneData(data: data)) : try decoder.decode(ResponseType.self, from: data)
 
 				DispatchQueue.main.async {
 					completion(responseObject, nil)
@@ -245,24 +236,14 @@ extension UdacityClient {
 				return
 			}
 			do {
-				let responseObject: ResponseType
-				if cleanData {
-					responseObject = try decoder.decode(ResponseType.self, from: cleanResposneData(data: data))
-				} else {
-					responseObject = try decoder.decode(ResponseType.self, from: data)
-				}
+				let responseObject = cleanData ? try decoder.decode(ResponseType.self, from: cleanResposneData(data: data)) : try decoder.decode(ResponseType.self, from: data)
 
 				DispatchQueue.main.async {
 					completion(responseObject, nil)
 				}
 			} catch {
 				do {
-					let errorResponse: UdacityErrorResponse
-					if cleanData {
-						errorResponse = try decoder.decode(UdacityErrorResponse.self, from: cleanResposneData(data: data))
-					} else  {
-						errorResponse = try decoder.decode(UdacityErrorResponse.self, from: data)
-					}
+					let errorResponse = cleanData ? try decoder.decode(UdacityErrorResponse.self, from: cleanResposneData(data: data)) : try decoder.decode(UdacityErrorResponse.self, from: data)
 
 					DispatchQueue.main.async {
 						completion(nil, errorResponse)

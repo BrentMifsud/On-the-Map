@@ -56,11 +56,7 @@ class ConfirmPinViewController: UIViewController {
 
 		var mediaUrl: String
 
-		if mediaText.prefix(7).lowercased().contains("http://") || mediaText.prefix(8).lowercased().contains("https://") {
-			mediaUrl = mediaText
-		} else {
-			mediaUrl = "https://" + mediaText
-		}
+		mediaUrl = mediaText.prefix(7).lowercased().contains("http://") || mediaText.prefix(8).lowercased().contains("https://") ? mediaText : "https://" + mediaText
 
 		//TODO: Remove hard coding once udacity issue is fixed
 		var firstName: String = "John"
@@ -81,16 +77,13 @@ class ConfirmPinViewController: UIViewController {
 
 		let studentLocationRequest = StudentLocationRequest(uniqueKey: UdacityClient.uniqueKey, firstName: firstName, lastName: lastName, mapString: locationName, mediaURL: mediaUrl, latitude: Float(coordinate.latitude), longitude: Float(coordinate.longitude))
 
-		if updateExistingPin {
-			updateExistingPin(studentLocationRequest: studentLocationRequest)
-		} else {
-			postNewPin(studentLocationRequest: studentLocationRequest)
-		}
+		updateExistingPin ? updateExistingPin(studentLocationRequest: studentLocationRequest) : postNewPin(studentLocationRequest: studentLocationRequest)
 	}
 
 
 	func postNewPin(studentLocationRequest: StudentLocationRequest){
 		UdacityClient.postStudentLocation(studentLocationRequest: studentLocationRequest) { [unowned self] (success, error) in
+
 			if success {
 				self.navigationController?.popToRootViewController(animated: true)
 			} else {
@@ -104,6 +97,7 @@ class ConfirmPinViewController: UIViewController {
 		guard !existingStudentLocations.isEmpty else {return}
 
 		UdacityClient.putStudentLocation(studentLocationRequest: studentLocationRequest, objectId: existingStudentLocations[0].objectId) { (success, error) in
+
 			if success {
 				self.navigationController?.popToRootViewController(animated: true)
 			} else {

@@ -38,11 +38,8 @@ extension UdacityClient {
 	}
 
 	class func firstTimeLogin() -> Bool {
-		if sessionId.isEmpty && sessionExpiry.isEmpty && uniqueKey.isEmpty {
-			return true
-		} else {
-			return false
-		}
+		let firstTimeLogin = sessionId.isEmpty && sessionExpiry.isEmpty && uniqueKey.isEmpty ? true : false
+		return firstTimeLogin
 	}
 
 }

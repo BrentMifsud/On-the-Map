@@ -62,11 +62,9 @@ class LoginViewController: UIViewController {
 	}
 
 	fileprivate func setLoggingIn(_ loggingIn: Bool){
-		if loggingIn {
-			activityIndicator.startAnimating()
-		} else {
-			activityIndicator.stopAnimating()
-		}
+
+		loggingIn ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+
 		emailTextField.isEnabled = !loggingIn
 		passwordTextField.isEnabled = !loggingIn
 		loginButton.isEnabled = !loggingIn
@@ -78,11 +76,7 @@ extension LoginViewController {
 	func handleLoginResponse(success: Bool, error: Error?){
 		unowned let loginVC = self
 
-		if success {
-			loginVC.performSegue(withIdentifier: "completeLogin", sender: nil)
-		} else {
-			showLoginFailure(message: error?.localizedDescription ?? "Placeholder Login Error Message")
-		}
+		success ? loginVC.performSegue(withIdentifier: "completeLogin", sender: nil) : showLoginFailure(message: error?.localizedDescription ?? "Placeholder Login Error Message")
 
 		setLoggingIn(false)
 	}

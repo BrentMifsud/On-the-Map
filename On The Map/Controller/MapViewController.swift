@@ -59,11 +59,9 @@ class MapViewController: UIViewController {
 		activityIndicator.startAnimating()
 
 		UdacityClient.getStudentLocation(allStudents: false) { [unowned self] (response, error) in
-			if response.count > 0 {
-				self.presentOverwriteAlert(students: response)
-			} else {
-				self.performSegue(withIdentifier: "addPin", sender: (false, []))
-			}
+
+			response.count > 0 ? self.presentOverwriteAlert(students: response) : self.performSegue(withIdentifier: "addPin", sender: (false, []))
+
 			self.activityIndicator.stopAnimating()
 		}
 	}
@@ -79,11 +77,7 @@ class MapViewController: UIViewController {
 	}
 
 	func isGeocoding(_ geocoding: Bool){
-		if geocoding{
-			activityIndicator.startAnimating()
-		} else {
-			activityIndicator.stopAnimating()
-		}
+		geocoding ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
 
 		isDownloading(geocoding)
 	}
