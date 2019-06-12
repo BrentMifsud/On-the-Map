@@ -93,6 +93,10 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="dAL-Gi-rA3">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" name="udacityColor"/>
                         <constraints>
@@ -105,6 +109,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="dAL-Gi-rA3" id="ltV-Pa-ud9"/>
                         <outlet property="emailTextField" destination="t1k-Dh-ggh" id="leO-sn-qsc"/>
                         <outlet property="loginButton" destination="WRU-MD-nQ0" id="Fc9-TW-eEe"/>
                         <outlet property="passwordTextField" destination="X7u-T0-S2S" id="AHD-rB-QDW"/>
